@@ -1,0 +1,499 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Private CRM 2.4 - Laboratorio 5 clienti</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f5f9;color:#20334b;font:15px Arial,sans-serif}header{background:#172d4d;color:#fff;padding:22px}header h1{margin:0}header p{color:#d5deea}main{max-width:1080px;margin:auto;padding:16px}nav{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}button{border:0;border-radius:8px;padding:10px 13px;background:#1c4778;color:#fff;cursor:pointer}nav button{background:#e2eaf3;color:#183b65}nav button.active{background:#183b65;color:white}.card{background:white;border:1px solid #dde5ef;border-radius:12px;padding:17px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}.metric{background:#eef3f9;padding:14px;border-radius:10px}.metric strong{display:block;font-size:21px;margin-top:8px}label{display:block;margin:12px 0 5px;font-weight:bold;font-size:13px}input,select,textarea{width:100%;border:1px solid #c9d4e2;border-radius:7px;padding:10px;font:inherit}textarea{min-height:70px}.item{padding:12px 0;border-bottom:1px solid #e8edf3}.muted{font-size:13px;color:#63758c}.warn{background:#fff1d5;border-radius:9px;padding:12px}h2{margin:0 0 12px;font-size:21px}h3{margin:16px 0 8px;font-size:16px}.pill{display:inline-block;padding:5px 9px;background:#e6edf6;border-radius:99px;font-size:12px}.bar{height:9px;background:#e4eaf1;border-radius:10px;overflow:hidden}.bar span{display:block;height:100%;background:#1c4778}.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.hero{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}.eyebrow{font-size:11px;font-weight:bold;letter-spacing:1.2px;color:#61738d;margin-bottom:8px}.subnav{margin:3px 4px 3px 0;background:#e2eaf3;color:#183b65}.subnav:hover{background:#cbd9ea}@media print{header,nav,.warn,.noPrint{display:none!important}body{background:#fff}main{max-width:none;padding:0}.card{border:0}#clientReport{display:block}} </style><style>
+:root{--premium-navy:#152940;--premium-gold:#b8a37c;--premium-ink:#263447}
+.premium-report{max-width:850px;margin:14px auto;background:#fff;color:var(--premium-ink);box-shadow:0 5px 28px #14294012;font-family:Arial,sans-serif}
+.report-cover{min-height:650px;background:var(--premium-navy);color:#fff;padding:54px 55px;display:flex;flex-direction:column;justify-content:space-between;page-break-after:always;break-after:page}
+.report-brand{display:flex;align-items:center;gap:12px;letter-spacing:2px;font-size:14px}.report-brand small{display:block;font-size:9px;letter-spacing:1.4px;margin-top:6px;opacity:.7}.brand-mark{width:49px;height:49px;border:1px solid var(--premium-gold);display:grid;place-items:center;color:var(--premium-gold);font-family:Georgia,serif;font-size:21px;letter-spacing:0}
+.cover-kicker,.report-kicker{font-size:10px;letter-spacing:2.5px;color:var(--premium-gold);font-weight:bold}.cover-body h1{font-family:Georgia,serif;font-weight:normal;font-size:48px;line-height:1.16;margin:18px 0}.cover-body p{color:#d4dde7;max-width:450px;line-height:1.7}.cover-rule{width:95px;height:2px;background:var(--premium-gold);margin:40px 0}.cover-body h2{font-size:22px;color:white}.cover-date,.cover-foot{font-size:12px;color:#d4dde7}
+.report-content{padding:44px 52px}.report-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d7dce4;padding-bottom:20px}.report-top .report-brand{color:var(--premium-navy)}.report-top>span{font-size:12px;color:#6b7788}.report-intro{padding:30px 0 8px}.report-intro h2{font-family:Georgia,serif;font-size:29px;font-weight:normal;color:var(--premium-navy)}.report-intro p,.report-section p{line-height:1.65;font-size:13px;color:#536275}.report-section{margin:23px 0 28px;break-inside:avoid;page-break-inside:avoid}.report-heading{display:flex;gap:15px;align-items:center;font-family:Georgia,serif;font-weight:normal;color:var(--premium-navy);font-size:21px;padding-bottom:10px;border-bottom:1px solid #d9e0e8}.report-heading span{font-family:Arial,sans-serif;font-size:12px;color:var(--premium-gold);font-weight:bold}.report-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.report-metric{background:#f2f4f6;padding:15px;min-height:90px}.report-metric span{font-size:12px;color:#657181;display:block}.report-metric strong{font-size:21px;display:block;margin-top:12px;color:var(--premium-navy)}.report-rows{display:grid;gap:0}.report-row{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #e7eaf0;padding:11px 0;font-size:13px}.report-row strong{text-align:right}.report-footnote{font-size:11px!important}.report-footer{border-top:1px solid #d7dce4;padding-top:14px;margin-top:40px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.6px;color:#64738a}
+@media print{@page{size:A4;margin:10mm}header,nav,.warn,.noPrint{display:none!important}main{max-width:none;padding:0}body{background:white}.premium-report{box-shadow:none;max-width:none;margin:0}.report-cover{height:250mm;min-height:0;max-height:250mm;padding:27mm 20mm 20mm;overflow:hidden;print-color-adjust:exact;-webkit-print-color-adjust:exact}.report-content{padding:7mm 8mm}.report-intro{padding:18px 0 4px}.report-section{margin:15px 0 18px}.report-heading{padding-bottom:7px}.report-metric{padding:12px;min-height:75px}.report-row{padding:8px 0}.report-footer{margin-top:22px}.report-top{padding-bottom:13px}.report-section{break-inside:avoid;page-break-inside:avoid}.report-metric{print-color-adjust:exact;-webkit-print-color-adjust:exact}.report-cover h1{font-size:43px}}
+/* Safari/iPad print: prevent fragmented flex cover and keep all report sections printable. */
+@media print {
+ @page {size:A4; margin:10mm}
+ .premium-report {display:block!important; overflow:visible!important; height:auto!important}
+ .report-cover {display:block!important; position:relative!important; height:225mm!important; min-height:0!important; max-height:none!important; padding:0!important; overflow:visible!important; break-after:auto!important; page-break-after:auto!important; break-inside:avoid!important; page-break-inside:avoid!important; background:#152940!important}
+ .report-cover > .report-brand {position:absolute;top:26mm;left:19mm}
+ .report-cover > .cover-body {position:absolute;top:72mm;left:19mm;right:17mm}
+ .report-cover > .cover-foot {position:absolute;bottom:12mm;left:19mm}
+ .report-content {display:block!important; overflow:visible!important; height:auto!important; padding:5mm 7mm!important}
+ .report-section {break-inside:auto!important;page-break-inside:auto!important; margin:10px 0 12px!important}
+ .report-heading,.report-metrics,.report-row {break-inside:avoid!important;page-break-inside:avoid!important}
+ .report-footer {break-inside:avoid!important}
+ .report-cover, .report-content {box-sizing:border-box!important}
+ .report-cover {margin:0!important; border:0!important}
+ .report-content {break-before:page!important;page-break-before:always!important}
+}
+.agenda-entry{padding:10px 12px;margin:8px 0;background:#f4f7fb;border-left:3px solid #b8a37c;border-radius:5px}</style><style>
+.meeting-print{max-width:820px;margin:14px auto 30px;background:#fff;border:1px solid #dce3eb;box-shadow:0 8px 26px #14243b12;padding:35px 42px;color:#1d3048;font-size:13px;line-height:1.45}.meeting-head{background:#172d4d;color:#fff;padding:28px;margin:-35px -42px 22px}.meeting-brand{font-family:Georgia,serif;font-size:23px;color:#c9b68d}.meeting-brand span{font-family:Arial,sans-serif;font-size:10px;letter-spacing:1px;color:#e6eaf0;margin-left:12px}.meeting-kicker{font-size:10px;letter-spacing:1.2px;color:#d5c6a6;margin-top:30px}.meeting-head h1{font:normal 31px Georgia,serif;margin:7px 0}.meeting-head p{margin:0;color:#d6e0ec}.meeting-meta{display:grid;grid-template-columns:2fr 1.2fr 1fr;gap:12px;padding:13px 0;border-bottom:1px solid #dce3eb}.meeting-meta small{display:block;color:#64748b;font-size:9px;letter-spacing:1px}.meeting-meta strong{display:block;font-size:12px;margin-top:5px}.meeting-stats{display:flex;gap:12px;margin:17px 0}.meeting-stats>div{flex:1;background:#edf2f8;padding:12px}.meeting-stats b{display:block;font-size:21px}.meeting-stats span{font-size:11px;color:#596c82}.meeting-print h2{font-size:16px;color:#183657;margin:24px 0 10px}.meeting-area{break-inside:avoid;page-break-inside:avoid;border-top:1px solid #dce3eb;padding-top:8px;margin-top:14px}.meeting-area h3{font-size:14px;margin:8px 0}.meeting-row{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid #edf1f5}.meeting-box{display:inline-flex;align-items:center;justify-content:center;flex:none;width:16px;height:16px;border:1px solid #8593a5;border-radius:3px;font-size:12px}.meeting-priority{padding:7px 10px;border-left:3px solid #b9a57e;background:#f7f7f5;margin:5px 0}.meeting-priority b{font-size:11px}.meeting-notes{white-space:pre-wrap;overflow-wrap:anywhere;min-height:65px;background:#f7f9fc;padding:12px}.meeting-lines{height:95px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 26px,#d9e1ea 27px,#d9e1ea 28px)}.meeting-print footer{font-size:9px;color:#718096;border-top:1px solid #dce3eb;padding-top:12px;margin-top:22px}
+@media print{@page{size:A4;margin:13mm}header,nav,.warn,.noPrint{display:none!important}body,main,#app{margin:0!important;padding:0!important;max-width:none!important;background:#fff!important}#app>.meeting-print{display:block!important}.meeting-print{box-shadow:none!important;border:0!important;margin:0!important;padding:0!important;max-width:none!important;font-size:10.5px}.meeting-head{margin:0 0 14px!important;padding:19px 22px!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.meeting-head h1{font-size:27px}.meeting-print h2{margin:17px 0 8px}.meeting-stats>div,.meeting-priority{print-color-adjust:exact;-webkit-print-color-adjust:exact}.meeting-area{break-inside:avoid;page-break-inside:avoid}.meeting-row{padding:5px 0}.meeting-meta{gap:8px}}
+</style></head><body><header><h1>PRIVATE CRM <small>2.4 TEST · 5 CLIENTI</small></h1><p>Scheda cliente evoluta • Prototipo dimostrativo</p></header><main><div class="warn">LABORATORIO ISOLATO: cinque clienti interamente fittizi. Non modifica l’archivio operativo di Private CRM 2.0. Il salvataggio è locale al browser; non esistono accessi riservati o permessi effettivi.</div><nav id="menu"></nav><section id="app"></section></main><script>
+'use strict';
+const tabs=['Clienti','Scheda cliente','Profilo','Patrimonio','Intervista','Approfondimenti','Polizze','Fabbisogno','Verbali','Attività','Diagnosi','Relazione','Obiettivi','Cruscotto','Agenda','Priorità','Completezza','Preparazione incontro','Report incontro'];
+const groups=[['Famiglia','Composizione del nucleo familiare?','Persone economicamente a carico?','Esigenze di tutela familiare?'],['Redditi','Reddito netto familiare annuo?','Spese familiari annue?','Riserva per imprevisti?'],['Patrimonio','Patrimonio finanziario complessivo?','Immobili posseduti?','Mutui o finanziamenti?'],['Previdenza','Pensione futura stimata?','Fondi pensione o PIP presenti?','Divario previdenziale valutato?'],['Protezione','Coperture caso morte esistenti?','Coperture invalidità e sanitarie?','Rischio non autosufficienza valutato?'],['Obiettivi','Obiettivi a breve termine?','Obiettivi a lungo termine?','Pianificazione successoria affrontata?']];
+const fresh=n=>({name:n,job:'',family:'',assets:'',income:65000,years:8,debts:100000,liquid:80000,answers:{},notes:{},policies:[],meetings:[],tasks:[],profile:{}});
+let db={"clients":[{"name":"Mario Rossi (demo)","job":"Impiegato","family":"Coniuge e due figli","assets":"Dati interamente fittizi per collaudo","income":68000,"years":8,"debts":110000,"liquid":85000,"answers":{},"notes":{},"policies":[],"meetings":[{"type":"Incontro","text":"Colloquio conoscitivo dimostrativo","date":"2026-11-02","visibility":"Interno","followup":"Aggiornare dati e obiettivi"}],"tasks":[{"text":"Verifica documentazione cliente","owner":"Consulente","done":false,"due":"2026-11-05","priority":"Alta"},{"text":"Aggiornare profilo previdenziale","owner":"Consulente","done":false,"due":"2026-11-18","priority":"Media"}],"profile":{},"goalsV16":[{"label":"Fondo emergenza","area":"Finanziaria","target":20000,"current":5000,"due":"2027-12-31","status":"In corso"}],"appointments18":[{"text":"Revisione periodica","date":"2026-11-12","time":"10:30","notes":"Appuntamento fittizio per test","completed":false}]},{"name":"Laura Bianchi (demo)","job":"Imprenditrice","family":"Coniuge","assets":"Dati interamente fittizi per collaudo","income":145000,"years":12,"debts":200000,"liquid":240000,"answers":{},"notes":{},"policies":[],"meetings":[{"type":"Incontro","text":"Colloquio conoscitivo dimostrativo","date":"2026-11-02","visibility":"Interno","followup":"Aggiornare dati e obiettivi"}],"tasks":[{"text":"Analisi coperture aziendali","owner":"Consulente","done":false,"due":"2026-11-03","priority":"Alta"},{"text":"Richiedere bilancio aggiornato","owner":"Consulente","done":false,"due":"2026-11-20","priority":"Media"}],"profile":{},"goalsV16":[{"label":"Protezione patrimonio","area":"Assicurativa","target":100000,"current":30000,"due":"2027-06-30","status":"In corso"}],"appointments18":[{"text":"Tutela patrimonio","date":"2026-11-16","time":"09:00","notes":"Appuntamento fittizio per test","completed":false}]},{"name":"Andrea Verdi (demo)","job":"Libero professionista","family":"Single","assets":"Dati interamente fittizi per collaudo","income":72000,"years":20,"debts":25000,"liquid":35000,"answers":{},"notes":{},"policies":[],"meetings":[{"type":"Incontro","text":"Colloquio conoscitivo dimostrativo","date":"2026-11-02","visibility":"Interno","followup":"Aggiornare dati e obiettivi"}],"tasks":[{"text":"Valutazione tutela reddito","owner":"Consulente","done":false,"due":"2026-11-10","priority":"Alta"},{"text":"Esaminare posizione previdenziale","owner":"Consulente","done":false,"due":"2026-11-24","priority":"Media"}],"profile":{},"goalsV16":[{"label":"Capitale pensionistico","area":"Previdenziale","target":180000,"current":22000,"due":"2045-12-31","status":"In corso"}],"appointments18":[{"text":"Previdenza integrativa","date":"2026-11-19","time":"15:00","notes":"Appuntamento fittizio per test","completed":false}]},{"name":"Giulia Conti (demo)","job":"Dirigente","family":"Coniuge e un figlio","assets":"Dati interamente fittizi per collaudo","income":118000,"years":15,"debts":90000,"liquid":160000,"answers":{},"notes":{},"policies":[],"meetings":[{"type":"Incontro","text":"Colloquio conoscitivo dimostrativo","date":"2026-11-02","visibility":"Interno","followup":"Aggiornare dati e obiettivi"}],"tasks":[{"text":"Ribilanciamento portafoglio","owner":"Consulente","done":false,"due":"2026-11-14","priority":"Alta"},{"text":"Aggiornare beneficiari polizze","owner":"Consulente","done":false,"due":"","priority":"Media"}],"profile":{},"goalsV16":[{"label":"Università figlio","area":"Finanziaria","target":90000,"current":45000,"due":"2035-09-01","status":"In corso"}],"appointments18":[{"text":"Pianificazione familiare","date":"2026-11-06","time":"11:00","notes":"Appuntamento fittizio per test","completed":true}]},{"name":"Paolo Ferrari (demo)","job":"Pensionato","family":"Vedovo, due figli adulti","assets":"Dati interamente fittizi per collaudo","income":41000,"years":5,"debts":0,"liquid":320000,"answers":{},"notes":{},"policies":[],"meetings":[{"type":"Incontro","text":"Colloquio conoscitivo dimostrativo","date":"2026-11-02","visibility":"Interno","followup":"Aggiornare dati e obiettivi"}],"tasks":[{"text":"Verificare assetto successorio","owner":"Consulente","done":false,"due":"2026-11-04","priority":"Alta"},{"text":"Rivedere fabbisogno liquidità","owner":"Consulente","done":false,"due":"2026-11-27","priority":"Bassa"}],"profile":{},"goalsV16":[{"label":"Riserva liquidità","area":"Finanziaria","target":50000,"current":42000,"due":"2027-03-31","status":"In corso"}],"appointments18":[{"text":"Incontro successorio","date":"2026-11-13","time":"16:00","notes":"Appuntamento fittizio per test","completed":false}]}],"selected":0},tab=15;
+try{let s=JSON.parse(localStorage.getItem('privateCRM24_TEST5')||localStorage.getItem('privateCRM23_TEST5')||localStorage.getItem('privateCRM221_TEST5')||localStorage.getItem('privateCRM22_TEST5')||localStorage.getItem('privateCRM20_TEST5')||'null');if(s&&Array.isArray(s.clients)&&s.clients.length)db=s}catch(e){}
+const c=()=>db.clients[db.selected];const e=x=>String(x??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const eur=x=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(x)||0);
+const num=x=>Number(x)||0;const save=()=>{try{localStorage.setItem('privateCRM24_TEST5',JSON.stringify(db))}catch(e){alert('Impossibile salvare nel browser')}};
+
+// Recupero conservativo, solo su conferma esplicita. Nessun archivio precedente viene modificato.
+function sourceArchives(){return []}
+function mergeMissing(target,source){
+ const empty=v=>v===undefined||v===null||v==='';
+ const clone=v=>JSON.parse(JSON.stringify(v));
+ let added=0;
+ for(const key of ['answers','notes','profile','cashflow']){
+   if(source[key]&&typeof source[key]==='object'&&!Array.isArray(source[key])){
+     if(!target[key]||typeof target[key]!=='object')target[key]={};
+     for(const [k,v] of Object.entries(source[key]))if(empty(target[key][k])&&!empty(v)){target[key][k]=clone(v);added++}
+   }
+ }
+ for(const key of ['policies','meetings','tasks','positions']){
+   if(!Array.isArray(source[key]))continue;
+   if(!Array.isArray(target[key]))target[key]=[];
+   for(const item of source[key]){
+     if(!target[key].some(existing=>JSON.stringify(existing)===JSON.stringify(item))){target[key].push(clone(item));added++}
+   }
+ }
+ for(const [key,value] of Object.entries(source)){
+   if(['answers','notes','profile','cashflow','policies','meetings','tasks','positions','name'].includes(key))continue;
+   if(empty(target[key])&&!empty(value)){target[key]=clone(value);added++}
+ }
+ return added;
+}
+function recoverArchives(){
+ const sources=sourceArchives();
+ if(!sources.length)return alert('Non sono disponibili archivi precedenti in questo browser. Nessuna modifica effettuata.');
+ if(!confirm('Recuperare le informazioni mancanti dagli archivi precedenti? I dati già presenti nella 1.7 hanno priorità. Prima verrà salvata una copia di sicurezza locale.'))return;
+ try{
+  const stamp=new Date().toISOString().replace(/[:.]/g,'-');
+  localStorage.setItem('privateCRM17_backup_'+stamp,JSON.stringify(db));
+  let changes=0;
+  for(const src of sources){for(const old of src.clients){
+   if(!old||!old.name)continue;
+   const match=db.clients.find(z=>String(z.name).trim().toLowerCase()===String(old.name).trim().toLowerCase());
+   if(match)changes+=mergeMissing(match,old);
+   else{db.clients.push(JSON.parse(JSON.stringify(old)));changes++}
+  }}
+  save();render();
+  alert('Recupero completato. Elementi/campi aggiunti: '+changes+'. Verifica Polizze, Intervista e Relazione. Gli archivi precedenti non sono stati modificati.');
+ }catch(err){alert('Recupero interrotto: '+err.message+'. Gli archivi precedenti restano invariati.')}
+}
+function exportBackup(){
+ const payload={exportedAt:new Date().toISOString(),version:'2.0',db,previousArchives:sourceArchives()};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='private-crm-v22-test5-backup-'+localToday()+'.json';a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),3000);
+}
+let pendingImport=null;
+function validateArchive(value){
+ if(!value||typeof value!=='object'||Array.isArray(value)||!Array.isArray(value.clients)||!value.clients.length||value.clients.length>1000)throw Error('Archivio non valido o senza clienti.');
+ for(const client of value.clients){
+  if(!client||typeof client!=='object'||Array.isArray(client)||typeof client.name!=='string'||!client.name.trim())throw Error('Scheda cliente non valida.');
+  for(const k of ['policies','meetings','tasks','positions'])if(client[k]!==undefined&&!Array.isArray(client[k]))throw Error('Campo '+k+' non valido.');
+  for(const k of ['answers','notes','profile','cashflow'])if(client[k]!==undefined&&(client[k]===null||typeof client[k]!=='object'||Array.isArray(client[k])))throw Error('Campo '+k+' non valido.');
+ }
+ return {clients:value.clients,selected:Number.isInteger(value.selected)&&value.selected>=0&&value.selected<value.clients.length?value.selected:0};
+}
+function archiveStats(value){
+ const count=k=>value.clients.reduce((sum,cl)=>sum+(Array.isArray(cl[k])?cl[k].length:0),0);
+ return value.clients.length+' clienti, '+count('policies')+' polizze, '+count('positions')+' posizioni patrimoniali, '+count('meetings')+' verbali, '+count('tasks')+' attività';
+}
+async function previewImport(input){
+ pendingImport=null;
+ const target=document.getElementById('importPreview'),button=document.getElementById('importButton');button.disabled=true;
+ if(!input.files||!input.files[0]){target.textContent='Nessun file selezionato.';return}
+ try{
+  const file=input.files[0];if(file.size>5*1024*1024)throw Error('File troppo grande (massimo 5 MB).');
+  const data=JSON.parse(await file.text());
+  const parsed=validateArchive(data.db||data);
+  pendingImport=parsed;
+  target.textContent='Backup selezionato: '+file.name+' — '+archiveStats(parsed)+'. Il ripristino sostituirà l’archivio laboratorio TEST5, non gli archivi precedenti.';
+  button.disabled=false;
+ }catch(err){target.textContent='Impossibile utilizzare questo file: '+err.message}
+}
+function restoreImport(){
+ if(!pendingImport)return alert('Seleziona prima un backup JSON valido.');
+ if(!confirm('Hai già esportato e conservato il backup dell’archivio attuale 2.0? Il ripristino SOSTITUIRÀ i dati attivi con quelli del file selezionato. Annulla se non hai salvato il backup.'))return;
+ if(!confirm('Ultima conferma: sostituire l’archivio laboratorio TEST5 con '+archiveStats(pendingImport)+'?'))return;
+ try{
+  const original=JSON.stringify(db),incoming=JSON.stringify(pendingImport);
+  const key='privateCRM20_TEST5_preimport_'+new Date().toISOString().replace(/[:.]/g,'-');
+  localStorage.setItem(key,original);
+  localStorage.setItem('privateCRM20_TEST5',incoming);
+  db=JSON.parse(incoming);pendingImport=null;tab=0;render();
+  alert('Ripristino completato. Verifica ora Polizze, Intervista e Patrimonio. La copia precedente è conservata nel browser, ma mantieni anche il backup JSON scaricato.');
+ }catch(err){alert('Ripristino non eseguito: '+err.message+'. Controlla lo spazio disponibile nel browser.');}
+}
+const done=()=>Object.values(c().answers||{}).filter(x=>x&&x!=='Da esaminare').length;
+const tcm=()=>c().policies.filter(p=>p.type==='Temporanea caso morte'&&p.status==='Documentata').reduce((a,p)=>a+num(p.amount),0);
+const profile=()=>c().profile||(c().profile={});
+const pf=(label,key,type='text')=>'<label>'+label+'</label><input data-profile="'+key+'" type="'+type+'" value="'+e(profile()[key]||'')+'">';
+const cf=(label,key,type='text')=>'<label>'+label+'</label><input data-client="'+key+'" type="'+type+'" value="'+e(c()[key]??'')+'">';
+function go(i){if(i===2)i=1;tab=i;render();window.scrollTo(0,0)}
+function openDashboardClient(ci,dest){db.selected=ci;save();go(dest)}
+function choose(i){db.selected=i;save();go(1)}
+function selectTaskClient20(i){const n=Number(i);if(!Number.isInteger(n)||n<0||n>=db.clients.length)return;db.selected=n;save();go(9)}
+function addClient(){let n=document.getElementById('newname').value.trim();if(!n)return alert('Inserisci un nome fittizio');db.clients.push(fresh(n));db.selected=db.clients.length-1;save();go(1)}
+function addPolicy(){let p={type:document.getElementById('ptype').value,company:document.getElementById('pcompany').value,amount:document.getElementById('pamount').value,status:document.getElementById('pstatus').value};if(!p.company.trim())return alert('Inserisci la compagnia');c().policies.push(p);save();render()}
+function delPolicy(i){c().policies.splice(i,1);save();render()}
+function addMeeting(){let x=document.getElementById('mtext').value.trim();if(!x)return alert('Inserisci le note');c().meetings.push({type:document.getElementById('mtype').value,text:x,date:document.getElementById('mdate').value||localToday(),visibility:document.getElementById('mvis').value,followup:document.getElementById('mfollow').value.trim()});save();render()}
+function addTask(){let x=document.getElementById('tasktext').value.trim();if(!x)return alert('Inserisci una descrizione');c().tasks.push({text:x,owner:document.getElementById('owner').value,done:false,due:document.getElementById('taskdue').value,priority:document.getElementById('taskpriority').value});save();render()}
+function toggle(i){c().tasks[i].done=!c().tasks[i].done;save();render()}
+function addGoal(){let label=document.getElementById('goalname').value.trim();if(!label)return alert('Inserisci un obiettivo');let amount=document.getElementById('goaltarget').value,progress=document.getElementById('goalcurrent').value;if((amount!==''&&num(amount)<0)||(progress!==''&&num(progress)<0))return alert('Gli importi non possono essere negativi');c().goalsV16||=[];c().goalsV16.push({label,area:document.getElementById('goalarea').value,target:amount===''?null:num(amount),current:progress===''?null:num(progress),due:document.getElementById('goaldate').value,status:'In corso'});save();render()}
+function goalStatus(i,v){c().goalsV16[i].status=v;save();render()}
+function deleteGoal(i){if(!confirm('Eliminare questo obiettivo dimostrativo?'))return;c().goalsV16.splice(i,1);save();render()}
+const dateLabel=v=>{if(!v)return 'Senza scadenza';let m=String(v).match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);return m?m[3]+'/'+m[2]+'/'+m[1]:String(v)};
+
+
+function addPosition(){let p={group:document.getElementById('posgroup').value,label:document.getElementById('poslabel').value.trim(),amount:document.getElementById('posamount').value,owner:document.getElementById('posowner').value.trim(),date:document.getElementById('posdate').value,status:document.getElementById('posstatus').value,notes:document.getElementById('posnotes').value};if(!p.label||!p.amount||num(p.amount)<0)return alert('Inserisci descrizione e importo positivo');c().positions||=[];c().positions.push(p);save();render()}
+function removePosition(i){if(!confirm('Eliminare questa posizione dimostrativa?'))return;c().positions.splice(i,1);save();render()}
+function syncProfile(){let z={fin:0,imm:0,other:0,debt:0};(c().positions||[]).forEach(p=>{if(Object.hasOwn(z,p.group))z[p.group]+=num(p.amount)});if(!confirm('Sostituire i totali del profilo con quelli delle posizioni analitiche?'))return;profile().financial=z.fin+z.other;profile().properties=z.imm;c().debts=z.debt;save();alert('Totali del profilo aggiornati. Verifica eventuali altri beni inclusi nel totale finanziario.');go(1)}
+
+function diagnostic(){
+ let x=c(),p=profile(),pos=x.positions||[],s={fin:0,imm:0,other:0,debt:0};
+ pos.forEach(q=>{if(Object.prototype.hasOwnProperty.call(s,q.group))s[q.group]+=num(q.amount)});
+ let hasPos=pos.length>0,assets=s.fin+s.imm+s.other,net=assets-s.debt;
+ let f=x.cashflow||{},hasFlow=f.income!==undefined&&f.income!==''&&f.expenses!==undefined&&f.expenses!=='';
+ let savings=hasFlow?num(f.income)-num(f.expenses):null;
+ let pending=groups.flatMap((g,i)=>g.slice(1).map((q,j)=>({area:g[0],question:q,key:i+'-'+j}))).filter(q=>(x.answers||{})[q.key]==='Da approfondire');
+ let unverified=pos.filter(q=>q.status!=='Documentato');
+ let pendingTasks=(x.tasks||[]).filter(q=>!q.done);
+ let need=Math.max(0,num(x.income)*num(x.years)+num(x.debts)-num(x.liquid));
+ return {x,p,pos,s,hasPos,assets,net,f,hasFlow,savings,pending,unverified,pendingTasks,need,gap:Math.max(0,need-tcm())};
+}
+let reportMode='client';
+const reportLine=(label,value)=>'<div class="report-row"><span>'+e(label)+'</span><strong>'+e(value)+'</strong></div>';
+function reportHtml(){
+ const d=diagnostic(),x=d.x,p=d.p,dt=new Date().toLocaleDateString('it-IT');
+ const has=(v)=>v!==undefined&&v!==null&&String(v).trim()!=='';
+ const metric=(label,value)=>'<div class="report-metric"><span>'+e(label)+'</span><strong>'+e(value)+'</strong></div>';
+ const heading=(n,t)=>'<h3 class="report-heading"><span>'+n+'</span>'+t+'</h3>';
+ const brand='<div class="report-brand"><span class="brand-mark">MM</span><span><b>MARCO MECCHERI</b><small>PERSONAL FINANCIAL ADVISOR</small></span></div>';
+ let cover='<section class="report-cover">'+brand+'<div class="cover-body"><div class="cover-kicker">DOCUMENTO CONOSCITIVO · RISERVATO</div><h1>La tua situazione<br>patrimoniale</h1><p>Una visione d’insieme di patrimonio, protezione e pianificazione</p><div class="cover-rule"></div><h2>'+e(x.name)+'</h2><div class="cover-date">'+dt+'</div></div><div class="cover-foot">Documento dimostrativo · Solo dati fittizi</div></section>';
+ let intro='<div class="report-top">'+brand+'<span>'+dt+'</span></div><div class="report-intro"><div class="report-kicker">RELAZIONE CONOSCITIVA</div><h2>Il quadro d’insieme</h2><p>Una sintesi delle informazioni disponibili, da completare e verificare nel percorso di consulenza. Non costituisce valutazione di adeguatezza, raccomandazione personalizzata o proposta assicurativa.</p></div>';
+ let summary='<section class="report-section">'+heading('01','Sintesi patrimoniale')+'<div class="report-metrics">'+metric('Attività censite',d.hasPos?eur(d.assets):'N/D')+metric('Passività censite',d.hasPos?eur(d.s.debt):'N/D')+metric('Netto censito',d.hasPos?eur(d.net):'N/D')+'</div><p class="report-footnote">Il netto censito può essere parziale. I valori analitici non vengono sommati ai totali generici del profilo.</p></section>';
+ let cash='<section class="report-section">'+heading('02','Redditi e capacità di risparmio')+'<div class="report-rows">'+reportLine('Reddito netto familiare annuo',d.hasFlow?eur(d.f.income):'Da acquisire')+reportLine('Spese familiari annue',d.hasFlow?eur(d.f.expenses):'Da acquisire')+reportLine('Saldo annuo stimato',d.hasFlow?eur(d.savings):'Non calcolabile')+'</div></section>';
+ let protection='<section class="report-section">'+heading('03','Protezione familiare')+'<div class="report-metrics">'+metric('TCM documentate',eur(tcm()))+metric('Scostamento indicativo caso morte',eur(d.gap))+'</div><p class="report-footnote">Stima semplificata basata sui parametri inseriti. Da validare con analisi professionale; non rappresenta una raccomandazione.</p></section>';
+ let planning='<section class="report-section">'+heading('04','Obiettivi e previdenza')+'<div class="report-rows">'+reportLine('Obiettivi dichiarati',p.goals||'Da approfondire')+reportLine('Situazione previdenziale',p.pension||'Da approfondire')+reportLine('Nucleo familiare',x.family||'Da acquisire')+'</div></section>';
+ let next='<section class="report-section">'+heading('05','Prossimi passi')+'<p>'+(reportMode==='client'?'Le informazioni e gli obiettivi saranno approfonditi e condivisi nel prossimo incontro.':'Nota operativa del consulente: '+e(x.diagnosisNotes||'Da definire.'))+'</p></section>';
+ let internal='';
+ if(reportMode==='internal'){
+   const pending=d.pending.map(q=>'<li>'+e(q.area)+' · '+e(q.question)+(x.notes&&x.notes[q.key]?' — '+e(x.notes[q.key]):'')+'</li>').join('');
+   const tasks=d.pendingTasks.map(q=>'<li>'+e(q.text)+' ('+e(q.owner||'N/D')+')</li>').join('');
+   internal='<section class="report-section">'+heading('06','Verifiche e attività interne')+'<div class="report-rows">'+reportLine('Intervista completata',done()+'/18')+reportLine('Posizioni non documentate',String(d.unverified.length))+reportLine('Approfondimenti aperti',String(d.pending.length))+'</div><h4>Questioni da approfondire</h4>'+(pending?'<ul>'+pending+'</ul>':'<p>Nessuna segnalazione esplicita.</p>')+'<h4>Attività aperte</h4>'+(tasks?'<ul>'+tasks+'</ul>':'<p>Nessuna attività aperta.</p>')+'<h4>Note del consulente</h4><p>'+e(x.diagnosisNotes||'Da compilare')+'</p></section>';
+ }
+ return '<article id="clientReport" class="premium-report '+(reportMode==='internal'?'report-internal':'report-client')+'">'+cover+'<div class="report-content">'+intro+summary+cash+protection+planning+next+internal+'<footer class="report-footer">MARCO MECCHERI · PERSONAL FINANCIAL ADVISOR <span>DEMO · DATI FITTIZI</span></footer></div></article>';
+}
+function changeReportMode(mode){reportMode=mode;render()}
+
+function saveDiagnosis(){c().diagnosisNotes=document.getElementById('diagnosisNotes').value;save();render()}
+const localToday=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())};
+const appointmentState=a=>a.completed?'Completato':a.date<localToday()?'Da verificare':a.date===localToday()?'Oggi':'Programmato';
+function setAppointmentDone19(ci,ai,completed){
+ const a=db.clients[ci]?.appointments18?.[ai];if(!a)return;
+ a.completed=completed;save();render();
+}
+function setTaskDone19(ci,ti,completed){
+ const t=db.clients[ci]?.tasks?.[ti];if(!t)return;
+ t.done=completed;save();render();
+}
+function addAppointment18(){
+ const date=document.getElementById('app18date').value,time=document.getElementById('app18time').value,text=document.getElementById('app18text').value.trim(),ci=Number(document.getElementById('app18client').value),notes=document.getElementById('app18notes').value.trim();
+ if(!date||!text)return alert('Indica data e descrizione');
+ if(!db.clients[ci])return alert('Cliente non valido');
+ db.clients[ci].appointments18||=[];
+ db.clients[ci].appointments18.push({date,time,text,notes});
+ save();render();
+}
+function deleteAppointment18(ci,ai){
+ if(!confirm('Eliminare questo appuntamento dimostrativo?'))return;
+ if(!db.clients[ci]?.appointments18?.[ai])return;
+ db.clients[ci].appointments18.splice(ai,1);save();render();
+}
+function renderAgenda18(){
+ const data=window.agenda18Data,root=document.getElementById('agenda18list');
+ if(!data||!root)return;
+ const filter=document.getElementById('agenda18filter').value;
+ const dates=data.dates.filter(d=>filter==='all'||(filter==='completed'?data.entries.some(a=>a.date===d&&a.completed):filter==='future'?d>=data.today&&(data.tasks.some(t=>t.due===d)||data.entries.some(a=>a.date===d&&!a.completed)):true));
+ root.innerHTML=dates.length?dates.map(d=>{
+ const apps=data.entries.filter(a=>a.date===d&&(filter==='completed'?a.completed:filter==='future'?!a.completed:true)),tasks=filter==='completed'?[]:data.tasks.filter(t=>t.due===d);
+ return '<div class="item"><h3>'+e(dateLabel(d))+'</h3>'+
+ apps.map(a=>'<div class="agenda-entry"><b>Appuntamento '+e(a.time||'')+'</b> · '+e(a.text)+' <span class="pill">('+appointmentState(a)+')</span><p>'+e(a.client)+(a.notes?' — '+e(a.notes):'')+'</p><button class="subnav" onclick="openDashboardClient('+a.ci+',1)">Apri cliente</button> <button class="subnav" onclick="setAppointmentDone19('+a.ci+','+a.ai+','+(!a.completed)+')">'+(a.completed?'Riapri':'Segna completato')+'</button> <button class="subnav" onclick="deleteAppointment18('+a.ci+','+a.ai+')">Elimina</button></div>').join('')+
+ tasks.map(t=>'<div class="agenda-entry"><b>Attività</b> · '+e(t.text)+'<p>'+e(t.client)+' · Priorità '+e(t.priority||'Normale')+'</p><button class="subnav" onclick="openDashboardClient('+t.ci+',9)">Apri attività</button></div>').join('')+'</div>'
+ }).join(''):'<p class="muted">Nessun elemento nel periodo selezionato.</p>';
+}
+function prioritySignals20(cl){
+ const today=localToday();
+ const tasks=(cl.tasks||[]).filter(t=>!t.done);
+ const appts=(cl.appointments18||[]).filter(a=>!a.completed);
+ const goals=(cl.goalsV16||[]).filter(g=>g.status!=='Raggiunto');
+ const answered=Object.values(cl.answers||{}).filter(v=>v&&v!=='Da esaminare').length;
+ const missing=Math.max(0,18-answered);
+ const overdue=tasks.filter(t=>t.due&&t.due<today);
+ const lateAppts=appts.filter(a=>a.date&&a.date<today);
+ const nextTasks=tasks.filter(t=>t.due&&t.due>=today).sort((a,b)=>a.due.localeCompare(b.due));
+ const nextAppts=appts.filter(a=>a.date&&a.date>=today).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));
+ return {tasks,appts,goals,missing,overdue,lateAppts,nextTasks,nextAppts,high:tasks.filter(t=>t.priority==='Alta')};
+}
+function priorityDetails20(cl,ci){
+ const p=prioritySignals20(cl);
+ const jump=(label,dest)=>'<button class="subnav" onclick="openDashboardClient('+ci+','+dest+')">'+label+'</button>';
+ const entry=(title,detail,dest)=>'<div class="item"><b>'+e(title)+'</b><p class="muted">'+e(detail)+'</p>'+jump('Apri sezione',dest)+'</div>';
+ let html='';
+ if(p.lateAppts.length)html+=entry(p.lateAppts.length+' appuntamenti arretrati','Richiedono una verifica dello stato',14);
+ if(p.overdue.length)html+=entry(p.overdue.length+' attività scadute','Attività ancora aperte con data trascorsa',9);
+ if(p.high.length)html+=entry(p.high.length+' attività a priorità alta','Priorità indicata manualmente nelle attività',9);
+ if(p.nextAppts.length)html+=entry('Prossimo appuntamento: '+(p.nextAppts[0].text||'Senza descrizione'),dateLabel(p.nextAppts[0].date)+' · '+(p.nextAppts[0].time||'Ora non indicata'),14);
+ if(p.nextTasks.length)html+=entry('Prossima attività: '+(p.nextTasks[0].text||'Senza descrizione'),dateLabel(p.nextTasks[0].due),9);
+ if(p.goals.length)html+=entry(p.goals.length+' obiettivi aperti','Obiettivi ancora da monitorare',12);
+ if(p.missing)html+=entry(p.missing+' risposte conoscitive da esaminare','Conteggio indicativo delle 18 domande della demo',4);
+ return html||'<p class="muted">Nessuna segnalazione operativa secondo i dati presenti.</p>';
+}
+
+// Stati indipendenti per cliente/campo. Il dato sottostante non viene alterato.
+const qualityStates22=['Da completare','Compilato','Da verificare','Non applicabile'];
+function completeness21(cl){
+ const p=cl.profile||{},ans=cl.answers||{};
+ const filled=v=>v!==undefined&&v!==null&&String(v).trim()!=='';
+ const meaningful=v=>filled(v)&&v!=='Da esaminare';
+ const areas=[
+  {name:'Anagrafica',checks:[['Nominativo',filled(cl.name)],['Professione',filled(cl.job)],['Famiglia',filled(cl.family)],['Età',filled(p.age)],['Persone a carico',filled(p.dependents)]]},
+  {name:'Patrimonio',checks:[['Reddito',filled(cl.income)],['Posizioni patrimoniali',Array.isArray(cl.positions)&&cl.positions.length>0],['Flussi familiari',filled(cl.cashflow?.income)&&filled(cl.cashflow?.expenses)],['Passività',filled(cl.debts)||((cl.positions||[]).some(x=>x.group==='debt'))]]},
+  {name:'Previdenza',checks:[['Situazione previdenziale',filled(p.pension)],['Domanda sulla pensione',meaningful(ans['3-0'])],['Domanda su fondi pensione / PIP',meaningful(ans['3-1'])],['Domanda sul divario previdenziale',meaningful(ans['3-2'])]]},
+  {name:'Protezione assicurativa',checks:[['Esigenze di protezione',filled(p.protection)],['Polizze censite',Array.isArray(cl.policies)&&cl.policies.length>0],['Domanda sulle coperture',meaningful(ans['4-0'])],['Domanda sulle esigenze di tutela',meaningful(ans['0-2'])]]}
+ ];
+ return areas.map(a=>({...a,checks:a.checks.map(([label,hasData])=>{
+  const key=a.name+'::'+label,override=cl.qualityStates22?.[key];
+  const state=override==='Compilato'&&!hasData?'Da completare':qualityStates22.includes(override)?override:(hasData?'Compilato':'Da completare');
+  return {label,hasData,key,state};
+ }),get done(){return this.checks.filter(z=>z.hasData&&z.state==='Compilato').length},get pending(){return this.checks.filter(z=>z.state==='Da verificare').length},get total(){return this.checks.filter(z=>z.state!=='Non applicabile').length}}));
+}
+function setQuality22(ci,key,state){
+ if(!db.clients[ci]||!qualityStates22.includes(state))return;
+ const cl=db.clients[ci];cl.qualityStates22||={};cl.qualityStates22[decodeURIComponent(key)]=state;
+ save();render();
+}
+function completenessCard21(cl,ci){
+ const areas=completeness21(cl),done=areas.reduce((n,a)=>n+a.done,0),total=areas.reduce((n,a)=>n+a.total,0),pending=areas.reduce((n,a)=>n+a.pending,0);
+ const pct=(n,d)=>d?Math.round(n/d*100):null;
+ const opt=qualityStates22.map(st=>'<option value="'+e(st)+'">'+e(st)+'</option>').join('');
+ return '<div class="card"><div class="hero"><div><h2>'+e(cl.name)+'</h2><p class="muted">Completezza confermata: '+done+' / '+total+' applicabili · '+(pct(done,total)===null?'N/D':pct(done,total)+'%')+' · Da verificare: '+pending+'.</p></div><button class="subnav" onclick="openDashboardClient('+ci+',1)">Apri scheda</button></div>'+
+ areas.map(a=>{
+  const n=pct(a.done,a.total);
+  return '<div class="item"><b>'+e(a.name)+'</b> · '+a.done+'/'+a.total+' confermati · '+a.pending+' da verificare <span class="muted">('+(n===null?'N/D':n+'%')+')</span><div class="bar"><span style="width:'+(n||0)+'%"></span></div>'+
+  a.checks.map(z=>'<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0"><span style="flex:1;min-width:180px">'+e(z.label)+(z.hasData?' <small class="muted">(dato presente)</small>':' <small class="muted">(dato mancante)</small>')+'</span><select aria-label="Stato '+e(z.label)+'" style="max-width:230px" onchange="setQuality22('+ci+','+'\''+encodeURIComponent(z.key)+'\''+',this.value)">'+qualityStates22.map(st=>'<option value="'+e(st)+'"'+(st===z.state?' selected':'')+(st==='Compilato'&&!z.hasData?' disabled':'')+'>'+e(st)+'</option>').join('')+'</select></div>').join('')+
+  '</div>';
+ }).join('')+'</div>';
+}
+// Versione 2.3: checklist per preparare gli incontri, separata dai dati e dagli stati di completezza.
+function prepItems23(cl){
+ return completeness21(cl).flatMap(a=>a.checks.filter(z=>z.state!=='Non applicabile'&&(!z.hasData||z.state==='Da verificare'||z.state==='Da completare')).map(z=>({area:a.name,key:z.key,label:z.label,state:z.state,hasData:z.hasData})));
+}
+function setPrep23(ci,key,checked){
+ const cl=db.clients[ci];if(!cl)return;
+ cl.prep23||={};cl.prep23[decodeURIComponent(key)]=!!checked;save();render();
+}
+function setPrepNote23(ci,value){
+ const cl=db.clients[ci];if(!cl)return;cl.prepNote23=value;save();
+}
+function renderPrep23(){
+ const ci=db.selected,cl=db.clients[ci],items=prepItems23(cl),selected=items.filter(z=>cl.prep23?.[z.key]);
+ return '<div class="card"><div class="eyebrow">LABORATORIO 2.3 · PREPARAZIONE INCONTRO</div><h2>Checklist personalizzata</h2><p class="muted">Le voci derivano dai dati mancanti e da verificare. Spunta le informazioni da approfondire al prossimo incontro: la spunta non completa il dato e non modifica la percentuale di completezza. Salvataggio solo su questo browser.</p>'+ 
+ '<label for="prepClient23">Cliente dimostrativo</label><select id="prepClient23" onchange="db.selected=Number(this.value);save();render()">'+db.clients.map((c,i)=>'<option value="'+i+'"'+(i===ci?' selected':'')+'>'+e(c.name)+'</option>').join('')+'</select>'+
+ '<div class="grid"><div class="metric">Informazioni da approfondire<strong>'+items.length+'</strong></div><div class="metric">Selezionate per l’incontro<strong>'+selected.length+'</strong></div></div>'+
+ '<p><button class="subnav" onclick="go(16)">Apri Completezza</button> <button class="subnav" onclick="go(1)">Apri scheda cliente</button> <button onclick="go(18)">Anteprima report A4</button></p></div>'+
+ (items.length?['Anagrafica','Patrimonio','Previdenza','Protezione assicurativa'].map(area=>{
+ const group=items.filter(z=>z.area===area);if(!group.length)return '';
+ return '<div class="card"><h3>'+e(area)+'</h3>'+group.map(z=>'<div class="item" style="display:flex;gap:12px;align-items:flex-start"><input type="checkbox" style="width:19px;height:19px;flex-shrink:0" aria-label="Da approfondire: '+e(z.label)+'" '+(cl.prep23?.[z.key]?'checked ':'')+'data-key="'+encodeURIComponent(z.key)+'" onchange="setPrep23('+ci+',this.dataset.key,this.checked)"><div><b>'+e(z.label)+'</b><p class="muted">'+e(z.state)+' · '+(z.hasData?'dato presente':'dato mancante')+'</p></div></div>').join('')+'</div>';
+ }).join(''):'<div class="card"><p>Nessuna informazione mancante o da verificare.</p></div>')+
+ '<div class="card"><h3>Promemoria per l’incontro</h3><label for="prepNotes23">Note operative (solo laboratorio)</label><textarea id="prepNotes23" oninput="setPrepNote23('+ci+',this.value)" placeholder="Domande da porre, documenti da richiedere...">'+e(cl.prepNote23||'')+'</textarea><h3>Riepilogo delle voci selezionate</h3>'+(selected.length?selected.map(z=>'<div class="item">'+e(z.area)+' · '+e(z.label)+'</div>').join(''):'<p class="muted">Nessuna voce ancora selezionata.</p>')+'</div>';
+}
+// Private CRM 2.4: report A4 interno, generato in locale dalla checklist 2.3.
+function renderMeetingReport24(){
+ const ci=db.selected,cl=db.clients[ci],items=prepItems23(cl),chosen=items.filter(z=>cl.prep23?.[z.key]);
+ const now=new Date().toLocaleDateString('it-IT');
+ const appointments=(cl.appointments18||[]).filter(a=>!a.completed&&a.date).sort((a,b)=>(a.date+' '+(a.time||'')).localeCompare(b.date+' '+(b.time||'')));
+ const next=appointments.find(a=>a.date>=new Date().toLocaleDateString('en-CA'))||appointments[0];
+ const appointment=next?next.date.split('-').reverse().join('/')+(next.time?' alle '+next.time:''):'Da concordare';
+ const areas=['Anagrafica','Patrimonio','Previdenza','Protezione assicurativa'];
+ const section=(area)=>{const rows=items.filter(z=>z.area===area);return '<section class="meeting-area"><h3>'+e(area)+'</h3>'+(rows.length?rows.map(z=>'<div class="meeting-row"><span class="meeting-box">'+(cl.prep23?.[z.key]?'✓':'')+'</span><div><strong>'+e(z.label)+'</strong><div class="muted">'+e(z.state)+' · '+(z.hasData?'Dato presente':'Dato mancante')+(cl.prep23?.[z.key]?' · Priorità incontro':'')+'</div></div></div>').join(''):'<p class="muted">Nessun elemento aperto.</p>')+'</section>'};
+ return '<div class="card noPrint"><div class="eyebrow">PRIVATE CRM 2.4 · REPORT INTERNO</div><h2>Preparazione incontro · Anteprima A4</h2><p class="muted">Documento operativo riservato al consulente, con dati esclusivamente dimostrativi. Le priorità sono riportate come selezionate nella checklist, senza alterare la completezza.</p><label for="reportClient24">Cliente</label><select id="reportClient24" onchange="db.selected=Number(this.value);save();render()">'+db.clients.map((z,i)=>'<option value="'+i+'"'+(i===ci?' selected':'')+'>'+e(z.name)+'</option>').join('')+'</select><p><button onclick="window.print()">Stampa / Salva in PDF</button> <button class="subnav" onclick="go(17)">Modifica checklist e note</button></p><p class="muted">Su Safari iPad: Stampa, poi condividi o salva l’anteprima come PDF. Non vengono caricati dati su server.</p></div>'+
+ '<article class="meeting-print" id="meetingPrint24"><div class="meeting-head"><div class="meeting-brand">MM <span>PRIVATE CRM · LABORATORIO</span></div><div class="meeting-kicker">USO INTERNO · DATI FITTIZI</div><h1>Preparazione incontro</h1><p>Checklist operativa per il consulente</p></div><div class="meeting-meta"><div><small>CLIENTE</small><strong>'+e(cl.name)+'</strong></div><div><small>APPUNTAMENTO</small><strong>'+e(appointment)+'</strong></div><div><small>REPORT GENERATO</small><strong>'+e(now)+'</strong></div></div><div class="meeting-stats"><div><b>'+items.length+'</b><span>Informazioni da approfondire</span></div><div><b>'+chosen.length+'</b><span>Priorità selezionate</span></div></div><h2>Priorità per il prossimo incontro</h2>'+(chosen.length?chosen.map(z=>'<div class="meeting-priority"><b>'+e(z.area)+'</b> · '+e(z.label)+'</div>').join(''):'<p class="muted">Nessuna priorità selezionata.</p>')+'<h2>Informazioni mancanti o da verificare</h2>'+areas.map(section).join('')+'<section class="meeting-area"><h2>Promemoria e documenti da richiedere</h2><div class="meeting-notes">'+(cl.prepNote23?e(cl.prepNote23):'<span class="muted">Nessuna nota inserita.</span>')+'</div></section><section class="meeting-area"><h2>Annotazioni durante l’incontro</h2><div class="meeting-lines"></div></section><footer>PRIVATE CRM 2.4 · DOCUMENTO DIMOSTRATIVO · NON COSTITUISCE VALUTAZIONE DI ADEGUATEZZA</footer></article>';
+}
+function render(){let x=c();x.answers||={};x.notes||={};x.policies||=[];x.meetings||=[];x.tasks||=[];x.goalsV16||=[];x.profile||={};document.getElementById('menu').innerHTML=tabs.map((t,i)=>i===2?'':'<button class="'+(i===tab?'active':'')+'" onclick="go('+i+')">'+t+'</button>').join('');let h='';
+if(tab===17){h=renderPrep23()}
+if(tab===18){h=renderMeetingReport24()}
+if(tab===16){
+ h='<div class="card"><div class="eyebrow">LABORATORIO 2.3 · COMPLETEZZA CONFERMATA</div><h2>Completezza delle schede</h2><p class="muted">Imposta per ciascun campo Compilato, Da completare, Da verificare o Non applicabile. I campi non applicabili sono esclusi dal denominatore. Da verificare non aumenta la completezza: viene mostrato come indicatore separato. Compilato richiede un dato effettivamente presente. Le scelte non modificano i dati sottostanti e non costituiscono una verifica di adeguatezza.</p></div>'+db.clients.map((cl,ci)=>completenessCard21(cl,ci)).join('');
+}
+if(tab===15){
+ const rows=db.clients.map((cl,ci)=>({cl,ci,p:prioritySignals20(cl)}));
+ const count=(k)=>rows.reduce((n,r)=>n+r.p[k].length,0);
+ h='<div class="card"><div class="eyebrow">PRIVATE CRM 2.0 · PRIORITÀ OPERATIVE</div><h2>Priorità per cliente</h2><p class="muted">Segnalazioni basate esclusivamente su date, stati e priorità inseriti nella demo. Non costituiscono valutazioni finanziarie, assicurative o di adeguatezza.</p><div class="grid"><div class="metric">Clienti demo<strong>'+rows.length+'</strong></div><div class="metric">Attività scadute<strong>'+count('overdue')+'</strong></div><div class="metric">Incontri arretrati<strong>'+count('lateAppts')+'</strong></div><div class="metric">Attività priorità alta<strong>'+count('high')+'</strong></div></div></div>'+
+ rows.map(r=>'<div class="card"><div class="hero"><h2>'+e(r.cl.name)+'</h2><button class="subnav" onclick="openDashboardClient('+r.ci+',1)">Scheda cliente</button></div>'+priorityDetails20(r.cl,r.ci)+'</div>').join('');
+}
+if(tab===13){
+ const today=localToday();
+ const allTasks=db.clients.flatMap((cl,ci)=>(cl.tasks||[]).map((t,ti)=>({...t,ci,ti,client:cl.name})));
+ const priorityRank=t=>({'Alta':0,'Media':1,'Normale':2,'Bassa':3}[t.priority]??2);
+ const byUrgency=(a,b)=>(a.due||'9999').localeCompare(b.due||'9999')||priorityRank(a)-priorityRank(b);
+ const pending=allTasks.filter(t=>!t.done),overdue=pending.filter(t=>t.due&&t.due<today).sort(byUrgency),upcoming=pending.filter(t=>t.due&&t.due>=today).sort(byUrgency),undated=pending.filter(t=>!t.due).sort((a,b)=>priorityRank(a)-priorityRank(b));
+ const meetings=db.clients.flatMap((cl,ci)=>(cl.meetings||[]).map(m=>({...m,ci,client:cl.name}))).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,6);
+ const goals=db.clients.flatMap((cl,ci)=>(cl.goalsV16||[]).map(g=>({...g,ci,client:cl.name}))).filter(g=>g.status!=='Raggiunto');
+ const missing=db.clients.map((cl,ci)=>({ci,client:cl.name,count:18-Object.values(cl.answers||{}).filter(v=>v&&v!=='Da esaminare').length})).filter(z=>z.count>0);
+ const jumpClient=(ci,dest)=>'<button class="subnav" onclick="openDashboardClient('+ci+','+dest+')">Apri scheda</button>';
+ const taskLine=t=>'<div class="item"><b>'+e(t.text)+'</b><p>'+e(t.client)+' · '+e(dateLabel(t.due))+' · Priorità '+e(t.priority||'Normale')+'</p>'+jumpClient(t.ci,9)+' <button class="subnav" onclick="setTaskDone19('+t.ci+','+t.ti+',true)">Completa attività</button></div>';
+ const appointments=db.clients.flatMap((cl,ci)=>(cl.appointments18||[]).map((a,ai)=>({...a,ci,ai,client:cl.name}))).filter(a=>!a.completed).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));
+ const appLine=a=>'<div class="item"><b>'+e(a.text)+'</b> · '+e(dateLabel(a.date))+' '+e(a.time||'')+'<p>'+e(a.client)+' · '+appointmentState(a)+'</p><button class="subnav" onclick="setAppointmentDone19('+a.ci+','+a.ai+',true)">Segna completato</button></div>';
+ h='<div class="card"><div class="eyebrow">PRIVATE CRM 2.0.1 · PANORAMICA OPERATIVA</div><h2>Cruscotto del consulente</h2><p class="muted">Riepilogo dei soli dati dimostrativi salvati su questo browser. Non sono inviate notifiche.</p><div class="grid"><div class="metric">Clienti demo<strong>'+db.clients.length+'</strong></div><div class="metric">Attività aperte<strong>'+pending.length+'</strong></div><div class="metric">Attività scadute<strong>'+overdue.length+'</strong></div><div class="metric">Obiettivi da seguire<strong>'+goals.length+'</strong></div></div><p><button onclick="go(0)">Archivio clienti e backup</button></p></div>'+
+ '<div class="card"><h2>Priorità per cliente</h2><p class="muted">Riepilogo di scadenze, attività ad alta priorità, obiettivi e informazioni mancanti.</p><button onclick="go(15)">Apri priorità operative</button></div>'+'<div class="card"><h2>Appuntamenti arretrati da verificare</h2>'+(appointments.filter(a=>a.date<today).length?appointments.filter(a=>a.date<today).map(appLine).join(''):'<p class="muted">Nessun appuntamento arretrato aperto.</p>')+'</div>'+'<div class="card"><h2>Appuntamenti di oggi</h2>'+(appointments.filter(a=>a.date===today).length?appointments.filter(a=>a.date===today).map(appLine).join(''):'<p class="muted">Nessun appuntamento oggi.</p>')+'</div>'+'<div class="card"><h2>Prossimi appuntamenti</h2>'+(appointments.filter(a=>a.date>today).length?appointments.filter(a=>a.date>today).slice(0,6).map(appLine).join(''):'<p class="muted">Nessun appuntamento futuro.</p>')+'</div>'+'<div class="card"><h2>Attività scadute</h2>'+(overdue.length?overdue.map(taskLine).join(''):'<p class="muted">Nessuna attività scaduta.</p>')+'</div>'+
+ '<div class="card"><h2>Prossime scadenze</h2>'+(upcoming.length?upcoming.slice(0,8).map(taskLine).join(''):'<p class="muted">Nessuna scadenza futura registrata.</p>')+'</div>'+
+ '<div class="card"><h2>Attività senza scadenza</h2>'+(undated.length?undated.map(taskLine).join(''):'<p class="muted">Nessuna attività senza scadenza.</p>')+'</div>'+ '<div class="card"><h2>Interazioni recenti</h2>'+(meetings.length?meetings.map(m=>'<div class="item"><b>'+e(m.type||'Interazione')+'</b> · '+e(dateLabel(m.date))+'<p>'+e(m.client)+' — '+e(m.text||'')+'</p>'+jumpClient(m.ci,8)+'</div>').join(''):'<p class="muted">Nessuna interazione registrata.</p>')+'</div>'+
+ '<div class="card"><h2>Obiettivi da monitorare</h2>'+(goals.length?goals.slice(0,8).map(g=>'<div class="item"><b>'+e(g.label)+'</b><p>'+e(g.client)+' · '+e(g.area)+' · '+e(g.status||'In corso')+' · '+e(dateLabel(g.due))+'</p>'+jumpClient(g.ci,12)+'</div>').join(''):'<p class="muted">Nessun obiettivo aperto.</p>')+'</div>'+
+ '<div class="card"><h2>Interviste da completare</h2>'+(missing.length?missing.map(m=>'<div class="item"><b>'+e(m.client)+'</b><p>'+m.count+' domande da esaminare</p>'+jumpClient(m.ci,4)+'</div>').join(''):'<p class="muted">Tutte le domande risultano esaminate.</p>')+'</div>';
+}
+if(tab===14){
+ const today=localToday();
+ const entries=db.clients.flatMap((cl,ci)=>(cl.appointments18||[]).map((a,ai)=>({...a,ci,ai,client:cl.name}))).sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||''));
+ const tasks=db.clients.flatMap((cl,ci)=>(cl.tasks||[]).filter(t=>!t.done&&t.due).map(t=>({...t,ci,client:cl.name})));
+ const dates=[...new Set([...entries.map(a=>a.date),...tasks.map(t=>t.due)].filter(Boolean))].sort();
+ const dateInput='<label>Data appuntamento</label><input type="date" id="app18date" value="'+today+'"><label>Ora</label><input type="time" id="app18time"><label>Descrizione</label><input id="app18text" placeholder="Es. Revisione periodica"><label>Cliente</label><select id="app18client">'+db.clients.map((cl,ci)=>'<option value="'+ci+'">'+e(cl.name)+'</option>').join('')+'</select><label>Note (solo dati fittizi)</label><textarea id="app18notes"></textarea><p><button onclick="addAppointment18()">Registra appuntamento</button></p>';
+ h='<div class="card"><div class="eyebrow">PRIVATE CRM 2.0 · AGENDA OPERATIVA</div><h2>Agenda e scadenze</h2><p class="muted">Appuntamenti e attività registrati localmente. Nessuna sincronizzazione con calendari esterni o notifiche automatiche.</p><div class="grid"><div class="metric">Appuntamenti futuri<strong>'+entries.filter(a=>!a.completed&&a.date>=today).length+'</strong></div><div class="metric">Attività con data<strong>'+tasks.length+'</strong></div></div></div>'+
+ '<div class="card"><h2>Nuovo appuntamento</h2>'+dateInput+'</div>'+
+ '<div class="card"><h2>Calendario cronologico</h2><label>Visualizza</label><select id="agenda18filter" onchange="renderAgenda18()"><option value="future">Da oggi</option><option value="all">Tutte le date</option><option value="completed">Completati</option></select><div id="agenda18list"></div></div>';
+ window.agenda18Data={dates,entries,tasks,today};
+}
+if(tab===0)h='<div class="card"><h2>Archivio clienti</h2>'+db.clients.map((z,i)=>'<div class="item"><b>'+e(z.name)+'</b> <button onclick="choose('+i+')">Apri scheda cliente</button></div>').join('')+'<h3>Manutenzione archivio</h3><p class="muted">Esporta prima una copia di sicurezza, poi recupera i dati mancanti dalle versioni precedenti. Solo dati dimostrativi.</p><p><button onclick="exportBackup()">Esporta backup JSON</button> <button onclick="recoverArchives()">Recupera dati precedenti</button></p><h3>Ripristino da file JSON</h3><p class="muted">Seleziona un backup creato da Private CRM. Prima del ripristino puoi controllare clienti e contenuti. L’operazione non modifica i vecchi archivi.</p><input id="backupFile" type="file" accept=".json,application/json" onchange="previewImport(this)"><div id="importPreview" class="item">Nessun file selezionato.</div><p><button id="importButton" onclick="restoreImport()" disabled>Ripristina backup selezionato</button></p><p class="muted">Archivio attivo: privateCRM20_TEST5 • Salvataggio su questo dispositivo, non sincronizzato.</p><h3>Nuovo cliente fittizio</h3><input id="newname" placeholder="Nome dimostrativo"><p><button onclick="addClient()">Aggiungi</button></p></div>';
+if(tab===1){
+ let p=profile(),d=diagnostic(),open=x.tasks.filter(t=>!t.done).length;let nextTasks=x.tasks.filter(t=>!t.done&&t.due).sort((a,b)=>a.due.localeCompare(b.due)).slice(0,3);
+ let financial=d.hasPos?d.s.fin+d.s.other:num(p.financial),property=d.hasPos?d.s.imm:num(p.properties);
+ let debt=d.hasPos?d.s.debt:num(x.debts),net=financial+property-debt;
+ let financialText=d.hasPos?eur(financial):(p.financial!==undefined&&p.financial!==''?eur(financial):'N/D');
+ let netText=d.hasPos?eur(net):((p.financial!==undefined&&p.financial!==''||p.properties!==undefined&&p.properties!=='')?eur(net):'N/D');
+ let metric=(label,value)=>'<div class="metric">'+label+'<strong>'+value+'</strong></div>';
+ let jump=(label,target)=>'<button class="subnav" onclick="go('+target+')">'+label+'</button>';
+ h='<div class="card"><div class="hero"><div><div class="eyebrow">SCHEDA CLIENTE · VERSIONE 2.0</div><h2>'+e(x.name)+'</h2><p class="muted">'+e(p.stage||'Da profilare')+' · '+e(x.job||'Professione da indicare')+'</p></div><span class="pill">Solo dati dimostrativi</span></div>'+
+ '<div class="card"><h3>Completezza confermata delle informazioni</h3>'+completeness21(x).map(a=>'<p><b>'+e(a.name)+'</b>: '+a.done+'/'+a.total+' campi confermati · '+a.pending+' da verificare</p>').join('')+'<button class="subnav" onclick="go(16)">Apri indicatori di completezza</button> <button class="subnav" onclick="go(17)">Prepara incontro</button></div>'+'<div class="card"><h3>Priorità operative del cliente</h3>'+priorityDetails20(x,db.selected)+'</div><div class="grid">'+metric('Attività finanziarie censite',financialText)+metric('Passività',d.hasPos?eur(debt):'N/D')+metric('Netto patrimoniale censito',netText)+metric('Reddito familiare annuo',eur(x.income))+metric('Risparmio annuo stimato',d.hasFlow?eur(d.savings):'N/D')+metric('TCM documentate',eur(tcm()))+'</div>'+
+ '<p class="muted">'+(d.hasPos?'Valori patrimoniali calcolati dalle posizioni analitiche; non sono sommati ai totali del profilo.':'Posizioni patrimoniali analitiche non ancora censite: completare la sezione Patrimonio.')+' Il patrimonio può essere parziale.</p>'+
+ '<h3>Scadenze e priorità</h3>'+(nextTasks.length?nextTasks.map(t=>'<div class="item"><b>'+e(t.text)+'</b> · '+e(dateLabel(t.due))+' · '+e(t.priority||'Normale')+'</div>').join(''):'<p class="muted">Nessuna attività con scadenza registrata.</p>')+'<h3>Prossimi appuntamenti</h3>'+
+ ((x.appointments18||[]).filter(a=>!a.completed&&a.date>=localToday()).sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'').localeCompare(b.time||'')).slice(0,5).map(a=>'<div class="item"><b>'+e(a.text||'Appuntamento')+'</b> · '+e(dateLabel(a.date))+' · '+e(a.time||'Ora non indicata')+' · '+appointmentState(a)+(a.notes?'<p class="muted">'+e(a.notes)+'</p>':'')+'</div>').join('')||'<p class="muted">Nessun appuntamento futuro registrato.</p>')+
+ '<p><button class="subnav" onclick="go(14)">Apri agenda</button></p>'+
+ '<h3>Avanzamento conoscitivo</h3><div class="bar"><span style="width:'+(done()/18*100)+'%"></span></div><p class="muted">'+done()+'/18 domande esaminate · '+d.pending.length+' approfondimenti · '+open+' attività aperte</p></div>'+
+ '<div class="card"><h2>1. Anagrafica e famiglia</h2><div class="two"><div>'+cf('Nominativo','name')+cf('Professione','job')+cf('Composizione familiare','family')+'</div><div>'+pf('Età (anni)','age','number')+pf('Persone a carico','dependents','number')+'</div></div></div>'+
+ '<div class="card"><h2>2. Patrimonio e flussi familiari</h2><p class="muted">Il dettaglio delle posizioni e dei flussi è gestito in un unico archivio analitico.</p><div class="grid">'+metric('Attività finanziarie',financialText)+metric('Immobili censiti',d.hasPos?eur(d.s.imm):'N/D')+metric('Debiti censiti',d.hasPos?eur(d.s.debt):'N/D')+metric('Saldo familiare annuo',d.hasFlow?eur(d.savings):'N/D')+'</div><p>'+jump('Gestisci patrimonio e flussi',3)+'</p></div>'+
+ '<div class="card"><h2>3. Protezione assicurativa</h2><p><b>'+x.policies.length+'</b> polizze registrate · TCM documentate: <b>'+eur(tcm())+'</b></p><div class="two"><div>'+pf('Esigenze assicurative','protection')+'</div><div>'+cf('Anni di protezione TCM','years','number')+'</div></div><p>'+jump('Registro polizze',6)+' '+jump('Fabbisogno TCM',7)+'</p></div>'+
+ '<div class="card"><h2>4. Obiettivi e previdenza</h2>'+pf('Obiettivi finanziari','goals')+pf('Situazione previdenziale','pension')+'</div>'+
+ '<div class="card"><h2>5. Intervista e diagnosi</h2><p>'+done()+'/18 risposte esaminate · '+d.pending.length+' temi da approfondire</p><p>'+jump('Apri intervista',4)+' '+jump('Approfondimenti',5)+' '+jump('Diagnosi consulenziale',10)+'</p></div>'+
+ '<div class="card"><h2>6. Relazione e attività</h2><p>'+x.meetings.length+' interazioni · '+open+' attività aperte · '+x.goalsV16.length+' obiettivi monitorati</p>'+pf('Prossimo incontro / note','next')+'<label>Stato della consulenza</label><select data-profile="stage">'+['Da profilare','Analisi in corso','Analisi completata','Da aggiornare'].map(v=>'<option '+((p.stage||'Da profilare')===v?'selected':'')+'>'+v+'</option>').join('')+'</select><p>'+jump('Cronologia incontri',8)+' '+jump('Attività e scadenze',9)+' '+jump('Obiettivi monitorati',12)+' '+jump('Relazione stampabile',11)+'</p><p class="muted">I campi vengono salvati quando esci dal campo. I riepiloghi si aggiornano alla riapertura della scheda.</p></div>';
+}
+if(tab===2)h='<div class="card"><h2>Profilo cliente evoluto</h2><h3>Anagrafica e famiglia</h3>'+cf('Nominativo','name')+cf('Professione','job')+cf('Composizione familiare','family')+pf('Età (anni)','age','number')+pf('Persone a carico','dependents','number')+'<h3>Redditi e patrimonio</h3>'+cf('Reddito familiare annuo (€)','income','number')+pf('Patrimonio finanziario (€)','financial','number')+pf('Valore immobili (€)','properties','number')+cf('Debiti residui (€)','debts','number')+cf('Liquidità disponibile (€)','liquid','number')+'<h3>Previdenza e protezione</h3>'+pf('Situazione previdenziale','pension')+pf('Esigenze assicurative','protection')+'<h3>Obiettivi e relazione</h3>'+pf('Obiettivi finanziari','goals')+pf('Prossimo incontro / note','next')+'<label>Stato della consulenza</label><select data-profile="stage">'+['Da profilare','Analisi in corso','Analisi completata','Da aggiornare'].map(v=>'<option '+((profile().stage||'Da profilare')===v?'selected':'')+'>'+v+'</option>').join('')+'</select><p class="muted">Le modifiche vengono salvate quando esci dal campo.</p></div>';
+if(tab===4){h='<div class="card"><h2>Intervista iniziale</h2><p>'+done()+' di 18 domande esaminate</p></div>';groups.forEach((g,i)=>{h+='<div class="card"><h3>'+g[0]+'</h3>';g.slice(1).forEach((q,j)=>{let k=i+'-'+j;h+='<div class="item"><b>'+q+'</b><label>Stato</label><select data-answer="'+k+'">'+['Da esaminare','Verificato','Non presente','Da approfondire'].map(v=>'<option '+((x.answers[k]||'Da esaminare')===v?'selected':'')+'>'+v+'</option>').join('')+'</select><label>Note</label><textarea data-note="'+k+'">'+e(x.notes[k]||'')+'</textarea></div>'});h+='</div>'})}
+if(tab===5){h='<div class="card"><h2>Approfondimenti aperti</h2>';let count=0;groups.forEach((g,i)=>g.slice(1).forEach((q,j)=>{let k=i+'-'+j;if(x.answers[k]==='Da approfondire'){count++;h+='<div class="item"><b>'+g[0]+'</b><p>'+q+'</p><p class="muted">'+e(x.notes[k]||'Nessuna nota')+'</p></div>'}}));h+=(count?'':'<p>Nessun approfondimento aperto.</p>')+'</div>'}
+if(tab===6)h='<div class="card"><h2>Registro polizze</h2>'+x.policies.map((p,i)=>'<div class="item"><b>'+e(p.type)+'</b><p>'+e(p.company)+' · '+eur(p.amount)+'</p><small>'+e(p.status)+'</small> <button onclick="delPolicy('+i+')">Elimina</button></div>').join('')+'<h3>Nuova copertura</h3><label>Tipo</label><select id="ptype">'+['Temporanea caso morte','Invalidità permanente','Infortuni','Sanitaria','LTC','Abitazione','RC professionale','Altra'].map(v=>'<option>'+v+'</option>').join('')+'</select><label>Compagnia</label><input id="pcompany"><label>Capitale (€)</label><input id="pamount" type="number"><label>Stato</label><select id="pstatus"><option>Da verificare</option><option>Documentata</option></select><p><button onclick="addPolicy()">Aggiungi copertura</button></p></div>';
+if(tab===7){let need=Math.max(0,num(x.income)*num(x.years)+num(x.debts)-num(x.liquid));h='<div class="card"><h2>Fabbisogno caso morte</h2>'+cf('Reddito annuo da proteggere (€)','income','number')+cf('Anni di protezione','years','number')+cf('Debiti (€)','debts','number')+cf('Liquidità (€)','liquid','number')+'<div class="grid"><div class="metric">Fabbisogno<strong>'+eur(need)+'</strong></div><div class="metric">TCM documentate<strong>'+eur(tcm())+'</strong></div><div class="metric">Scostamento<strong>'+eur(Math.max(0,need-tcm()))+'</strong></div></div><p class="muted">Simulazione indicativa, non costituisce una raccomandazione assicurativa.</p></div>'}
+if(tab===8)h='<div class="card"><h2>Cronologia interazioni</h2>'+x.meetings.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(m=>'<div class="item"><b>'+e(m.type)+'</b> · '+e(dateLabel(m.date))+'<p>'+e(m.text)+'</p>'+(m.followup?'<p>Seguito: '+e(m.followup)+'</p>':'')+'</div>').join('')+'<h3>Nuova interazione</h3><label>Tipo</label><select id="mtype"><option>Incontro</option><option>Telefonata</option><option>Email</option><option>Videoconferenza</option></select><label>Data</label><input type="date" id="mdate"><label>Note</label><textarea id="mtext"></textarea><label>Seguito concordato</label><textarea id="mfollow"></textarea><label>Visibilità dimostrativa</label><select id="mvis"><option>Privato</option><option>Assistenti</option><option>Team</option></select><p><button onclick="addMeeting()">Registra</button></p><p class="muted">La visibilità non applica permessi reali.</p></div>';
+if(tab===9){let ts=x.tasks.map((t,i)=>({...t,i})).sort((a,b)=>Number(a.done)-Number(b.done)||(a.due||'9999').localeCompare(b.due||'9999'));h='<div class="card"><div class="eyebrow">LABORATORIO · CLIENTE SELEZIONATO</div><h2>Attività e scadenze</h2><h3>'+e(x.name)+'</h3><p class="muted">Le attività elencate e quelle nuove appartengono esclusivamente al cliente selezionato.</p><label for="taskClient20">Cambia cliente</label><select id="taskClient20" onchange="selectTaskClient20(this.value)">'+db.clients.map((cl,ci)=>'<option value="'+ci+'" '+(ci===db.selected?'selected':'')+'>'+e(cl.name)+'</option>').join('')+'</select><p><button class="subnav" onclick="go(1)">Apri scheda cliente</button> <button onclick="go(18)">Anteprima report A4</button></p></div><div class="card">'+ts.map(t=>'<div class="item"><div class="eyebrow">Cliente: '+e(x.name)+'</div><b>'+e(t.text)+'</b><p>'+e(t.owner||'Consulente')+' · Priorità '+e(t.priority||'Normale')+' · '+e(dateLabel(t.due))+' · '+(t.done?'Completata':'Aperta')+'</p><button onclick="toggle('+t.i+')">'+(t.done?'Riapri':'Completa')+'</button></div>').join('')+'<h3>Nuova attività</h3><label>Descrizione</label><input id="tasktext"><label>Responsabile</label><select id="owner"><option>Consulente</option><option>Assistente</option></select><label>Scadenza</label><input type="date" id="taskdue"><label>Priorità</label><select id="taskpriority"><option>Normale</option><option>Alta</option><option>Bassa</option></select><p><button onclick="addTask()">Aggiungi attività</button></p><p class="muted">Nessuna notifica automatica in questa demo.</p></div>'}
+if(tab===12)h='<div class="card"><h2>Monitoraggio obiettivi</h2><p class="muted">Obiettivi dimostrativi, non raccomandazioni.</p>'+x.goalsV16.map((g,i)=>'<div class="item"><b>'+e(g.label)+'</b><p>'+e(g.area)+' · '+e(dateLabel(g.due))+'</p><p>Attuale: '+(g.current===null?'N/D':eur(g.current))+' · Target: '+(g.target===null?'N/D':eur(g.target))+'</p>'+(g.target>0&&g.current!==null?'<p><strong>Avanzamento: '+(100*g.current/g.target).toLocaleString('it-IT',{maximumFractionDigits:1})+'%</strong></p><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.min(100,Math.max(0,Math.round(100*g.current/g.target)))+'"><span style="width:'+Math.min(100,Math.max(0,100*g.current/g.target))+'%"></span></div>':'')+'<label>Stato</label><select onchange="goalStatus('+i+',this.value)">'+['In corso','Da approfondire','Raggiunto','Sospeso'].map(v=>'<option '+(g.status===v?'selected':'')+'>'+v+'</option>').join('')+'</select><button onclick="deleteGoal('+i+')">Elimina</button></div>').join('')+'<h3>Nuovo obiettivo</h3><label>Descrizione</label><input id="goalname"><label>Area</label><select id="goalarea"><option>Finanziaria</option><option>Previdenziale</option><option>Assicurativa</option><option>Familiare</option></select><label>Target € (facoltativo)</label><input type="number" min="0" id="goaltarget"><label>Valore attuale € (facoltativo)</label><input type="number" min="0" id="goalcurrent"><label>Scadenza</label><input type="date" id="goaldate"><p><button onclick="addGoal()">Registra obiettivo</button></p></div>';
+if(tab===3){
+let positions=x.positions||[];
+let sums={fin:0,imm:0,other:0,debt:0};
+positions.forEach(p=>{if(Object.hasOwn(sums,p.group))sums[p.group]+=num(p.amount)});
+let total=sums.fin+sums.imm+sums.other-sums.debt;
+let finance=x.cashflow||{};
+let savings=num(finance.income)-num(finance.expenses);
+h='<div class="card"><h2>Patrimonio analitico</h2><p class="muted">Aggiungi una posizione per volta, anche durante incontri successivi. I valori dichiarati e documentati restano distinti.</p><div class="grid"><div class="metric">Attività finanziarie<strong>'+eur(sums.fin)+'</strong></div><div class="metric">Immobili<strong>'+eur(sums.imm)+'</strong></div><div class="metric">Altri beni<strong>'+eur(sums.other)+'</strong></div><div class="metric">Passività<strong>'+eur(sums.debt)+'</strong></div><div class="metric">Patrimonio netto analitico<strong>'+eur(total)+'</strong></div></div><p class="muted">Le posizioni qui inserite sono un dettaglio separato dai totali del Profilo 0.5: non sommare i due prospetti. Quando completi il censimento, usa il pulsante di allineamento per aggiornare il cruscotto.</p>';
+positions.forEach((p,i)=>{h+='<div class="item"><b>'+e(p.label)+'</b> · '+eur(p.amount)+'<p>'+e(({fin:'Attività finanziaria',imm:'Immobile',other:'Altro bene',debt:'Passività'})[p.group]||'')+' · '+e(p.owner||'Intestatario N/D')+' · '+e(p.status||'Da verificare')+'</p><small>Rilevazione: '+e(p.date||'N/D')+' · '+e(p.notes||'')+'</small><p><button onclick="removePosition('+i+')">Elimina posizione</button></p></div>'});
+h+='<h3>Nuova posizione</h3><label>Categoria</label><select id="posgroup"><option value="fin">Attività finanziaria</option><option value="imm">Immobile</option><option value="other">Altro bene</option><option value="debt">Mutuo o altro debito</option></select><label>Descrizione</label><input id="poslabel" placeholder="Es. Conto corrente Banca Demo"><label>Importo (€)</label><input id="posamount" type="number" min="0"><label>Intestatario</label><input id="posowner" placeholder="Es. Cliente / Coniuge"><label>Data di riferimento</label><input id="posdate" type="date"><label>Verifica</label><select id="posstatus"><option>Dichiarato</option><option>Documentato</option><option>Da verificare</option></select><label>Note</label><textarea id="posnotes"></textarea><p><button onclick="addPosition()">Aggiungi posizione</button></p><p><button onclick="syncProfile()">Allinea i totali al cruscotto</button></p></div>';
+h+='<div class="card"><h2>Flussi familiari</h2><label>Reddito netto annuo (€)</label><input data-flow="income" type="number" value="'+e(finance.income??'')+'"><label>Spese familiari annue (€)</label><input data-flow="expenses" type="number" value="'+e(finance.expenses??'')+'"><div class="metric">Risparmio annuo stimato<strong>'+eur(savings)+'</strong></div><p class="muted">Il saldo ha significato soltanto dopo aver compilato entrambi i campi.</p><h3>Informazioni da approfondire</h3><label>Elementi ancora mancanti</label><textarea data-flow="missing">'+e(finance.missing||'')+'</textarea></div>';
+}
+
+if(tab===10){let d=diagnostic();h='<div class="card"><h2>Diagnosi consulenziale • uso interno</h2><p class="muted">Indicatori descrittivi e informazioni da verificare, non raccomandazioni automatiche.</p><div class="grid"><div class="metric">Intervista<strong>'+done()+'/18</strong></div><div class="metric">Netto analitico censito<strong>'+(d.hasPos?eur(d.net):'N/D')+'</strong></div><div class="metric">Risparmio annuo stimato<strong>'+(d.hasFlow?eur(d.savings):'N/D')+'</strong></div><div class="metric">TCM documentate<strong>'+eur(tcm())+'</strong></div><div class="metric">Approfondimenti aperti<strong>'+d.pending.length+'</strong></div><div class="metric">Attività aperte<strong>'+d.pendingTasks.length+'</strong></div></div><h3>Qualità delle informazioni</h3><p>'+d.unverified.length+' posizioni patrimoniali non documentate su '+d.pos.length+' censite.</p><p>'+d.pending.length+' risposte dell’intervista richiedono approfondimento.</p><p class="muted">Il patrimonio censito non coincide necessariamente con quello complessivo; nessun dato mancante viene interpretato come zero.</p><h3>Priorità da valutare</h3>'+(d.pending.length?d.pending.slice(0,8).map(q=>'<div class="item">'+e(q.area)+' · '+e(q.question)+'</div>').join(''):'<p>Nessun approfondimento contrassegnato.</p>')+'<h3>Note e prossimi passi del consulente</h3><textarea id="diagnosisNotes" placeholder="Annota i punti da verificare, senza dati reali">'+e(x.diagnosisNotes||'')+'</textarea><p><button onclick="saveDiagnosis()">Salva note</button> <button onclick="go(11)">Apri relazione</button></p></div>'}
+if(tab===11)h='<div class="card noPrint"><h2>Relazione premium · Anteprima 1.6</h2><p>Seleziona il documento: relazione da condividere con il cliente oppure report operativo riservato al consulente. Solo dati dimostrativi.</p><button onclick="changeReportMode(\'client\')">Relazione cliente</button> <button onclick="changeReportMode(\'internal\')">Report interno</button> <button onclick="exportPremiumPdf()">Esporta PDF A4 (consigliato)</button> <button onclick="window.print()">Stampa browser (alternativa)</button><p class="muted">Documento selezionato: '+(reportMode==='client'?'Relazione cliente':'Report interno')+'. Il marchio tipografico MM è temporaneo: non sostituisce il logo originale.</p></div>'+reportHtml();
+
+document.getElementById('app').innerHTML=h;if(tab===14)renderAgenda18();
+document.querySelectorAll('[data-flow]').forEach(el=>el.addEventListener('change',()=>{x.cashflow||={};x.cashflow[el.dataset.flow]=el.value;save();if(el.dataset.flow!=='missing')render()}));
+document.querySelectorAll('[data-client]').forEach(el=>el.addEventListener('change',()=>{x[el.dataset.client]=el.value;save();if(tab===7)render()}));
+document.querySelectorAll('[data-profile]').forEach(el=>el.addEventListener('change',()=>{profile()[el.dataset.profile]=el.value;save()}));
+document.querySelectorAll('[data-answer]').forEach(el=>el.addEventListener('change',()=>{x.answers[el.dataset.answer]=el.value;save()}));
+document.querySelectorAll('[data-note]').forEach(el=>el.addEventListener('change',()=>{x.notes[el.dataset.note]=el.value;save()}));
+}render();
+/* Private CRM 1.5: PDF A4 generated locally, without Safari print pagination. */
+function exportPremiumPdf(){
+ const d=diagnostic(), x=d.x, p=d.p, dt=new Date().toLocaleDateString('it-IT');
+ const W=595.28,H=841.89,L=55,R=540, navy=[0.082,0.161,0.251],gold=[0.722,0.639,0.486],ink=[0.149,0.204,0.278],grey=[0.35,0.40,0.47];
+ const pages=[];let ops=[],y=0;
+ const fmt=n=>eur(n);
+ const clean=v=>String(v??'').replace(/[\r\n\t]+/g,' ').replace(/\s+/g,' ').trim();
+ const esc=v=>clean(v).replace(/[\\()]/g,'\\$&');
+ const color=c=>c.join(' ')+' rg';
+ function rect(x,top,w,h,c){ops.push(color(c)+` ${x.toFixed(2)} ${(H-top-h).toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re f`)}
+ function line(x1,top1,x2,top2,c=[.85,.87,.90]){ops.push(c.join(' ')+' RG 0.7 w '+x1+' '+(H-top1).toFixed(2)+' m '+x2+' '+(H-top2).toFixed(2)+' l S')}
+ function tx(v,x,top,size=11,font='F1',c=ink){ops.push('BT '+color(c)+` /${font} ${size} Tf 1 0 0 1 ${x.toFixed(2)} ${(H-top-size).toFixed(2)} Tm (${esc(v)}) Tj ET`)}
+ function width(v,size=11,bold=false){return Array.from(clean(v)).reduce((a,ch)=>a+(ch===' '?0.27:/[ilI1.,:;!|]/.test(ch)?0.25:/[MW@]/.test(ch)?0.84:0.52),0)*size*(bold?1.06:1)}
+ function wrap(v,max,size=11){const words=clean(v).split(' ');let lines=[],cur='';for(const word of words){let trial=cur?cur+' '+word:word;if(width(trial,size)>max&&cur){lines.push(cur);cur=word}else cur=trial;if(width(cur,size)>max){let part='';for(const ch of cur){if(width(part+ch,size)>max&&part){lines.push(part);part=ch}else part+=ch}cur=part}}if(cur)lines.push(cur);return lines.length?lines:['']}
+ function paragraph(v,top,opts={}){let {x=L,max=485,size=10.5,leading=16,font='F1',c=grey}=opts;for(const t of wrap(v,max,size)){tx(t,x,top,size,font,c);top+=leading}return top}
+ function addPage(){if(ops.length)pages.push(ops.join('\n'));ops=[];y=64}
+ function contentPage(){addPage();tx('MM',L,31,19,'F3',gold);tx('MARCO MECCHERI',L+45,32,11,'F2',navy);tx('PERSONAL FINANCIAL ADVISOR',L+45,48,7,'F1',grey);tx(dt,470,40,9,'F1',grey);line(L,67,R,67);y=90}
+ function ensure(h){if(y+h>H-76)contentPage()}
+ function heading(n,t){ensure(58);tx(n,L,y,10,'F2',gold);tx(t,L+30,y-4,18,'F3',navy);y+=29;line(L,y,R,y);y+=13}
+ function textrow(k,v){const kLines=wrap(k,295,10.5),vLines=wrap(v,175,10.5),count=Math.max(kLines.length,vLines.length);ensure(count*17+12);for(let i=0;i<count;i++){if(kLines[i])tx(kLines[i],L,y+i*17,10.5);if(vLines[i])tx(vLines[i],R-width(vLines[i],10.5,true),y+i*17,10.5,'F2')}y+=count*17+8;line(L,y,R,y);y+=7}
+ function note(t){let lines=wrap(t,485,9.3);ensure(lines.length*15+12);y=paragraph(t,y,{size:9.3,leading:15});y+=12}
+ function metrics(items){ensure(100);let n=items.length,gap=9,w=(485-(n-1)*gap)/n;items.forEach(([label,val],i)=>{let x0=L+i*(w+gap);rect(x0,y,w,75,[.945,.954,.964]);let ll=wrap(label,w-20,9);ll.slice(0,2).forEach((a,j)=>tx(a,x0+10,y+11+j*11,9,'F1',grey));let sz=width(val,16,true)>w-18?12:16;tx(val,x0+10,y+48,sz,'F2',navy)});y+=87}
+ function section(n,title,fn){heading(n,title);fn();y+=9}
+ // Dedicated, visually distinct covers for client and internal documents.
+ const isInternal=reportMode==='internal';
+ const coverNavy=isInternal?[0.105,0.151,0.205]:navy;
+ rect(0,0,W,H,coverNavy);
+ if(isInternal){rect(0,0,13,H,gold);rect(L,285,485,1,gold)}
+ rect(L,93,48,48,gold);rect(L+1,94,46,46,coverNavy);tx('MM',L+7,103,24,'F3',gold);
+ tx('MARCO MECCHERI',L+62,98,14,'F2',[1,1,1]);tx('PERSONAL FINANCIAL ADVISOR',L+62,121,8,'F1',[.79,.84,.89]);
+ if(isInternal){
+   tx('DOCUMENTO OPERATIVO  ·  USO ESCLUSIVO DEL CONSULENTE',L,320,9,'F2',gold);
+   tx('Report interno',L,365,37,'F3',[1,1,1]);
+   tx('di consulenza',L,411,37,'F3',[1,1,1]);
+   paragraph('Verifiche, attività, informazioni mancanti e prossimi approfondimenti',470,{max:445,size:12,leading:18,c:[.82,.86,.91]});
+ }else{
+   tx('DOCUMENTO CONOSCITIVO  ·  RISERVATO',L,305,10,'F2',gold);
+   tx('La tua situazione',L,351,35,'F3',[1,1,1]);tx('patrimoniale',L,395,35,'F3',[1,1,1]);
+   paragraph('Una visione d’insieme di patrimonio, protezione e pianificazione',463,{max:440,size:12,leading:18,c:[.82,.86,.91]});
+ }
+ rect(L,535,95,2,gold);y=566;y=paragraph(x.name,y,{max:470,size:20,leading:25,font:'F2',c:[1,1,1]});tx(dt,L,y+5,10,'F1',[.82,.86,.91]);
+ tx(isInternal?'USO INTERNO · DEMO · DATI FITTIZI':'Documento dimostrativo · Solo dati fittizi',L,777,9,'F1',[.82,.86,.91]);
+ contentPage();tx(reportMode==='client'?'RELAZIONE CONOSCITIVA':'REPORT INTERNO · RISERVATO',L,y,10,'F2',gold);y+=20;tx('Il quadro d’insieme',L,y,24,'F3',navy);y+=43;
+ y=paragraph((reportMode==='internal'?'Documento operativo riservato al consulente. Dati e verifiche da completare; non destinato alla consegna al cliente.':'Una sintesi delle informazioni disponibili, da completare e verificare nel percorso di consulenza. Non costituisce valutazione di adeguatezza, raccomandazione personalizzata o proposta assicurativa.'),y,{size:10.3,leading:15});y+=22;
+ section('01','Sintesi patrimoniale',()=>{metrics([['Attività censite',d.hasPos?fmt(d.assets):'N/D'],['Passività censite',d.hasPos?fmt(d.s.debt):'N/D'],['Netto censito',d.hasPos?fmt(d.net):'N/D']]);note('Il netto censito può essere parziale. I valori analitici non vengono sommati ai totali generici del profilo.')});
+ section('02','Redditi e capacità di risparmio',()=>{textrow('Reddito netto familiare annuo',d.hasFlow?fmt(d.f.income):'Da acquisire');textrow('Spese familiari annue',d.hasFlow?fmt(d.f.expenses):'Da acquisire');textrow('Saldo annuo stimato',d.hasFlow?fmt(d.savings):'Non calcolabile')});
+ section('03','Protezione familiare',()=>{metrics([['TCM documentate',fmt(tcm())],['Scostamento indicativo caso morte',fmt(d.gap)]]);note('Stima semplificata basata sui parametri inseriti. Da validare con analisi professionale; non rappresenta una raccomandazione.')});
+ ensure(175);section('04','Obiettivi e previdenza',()=>{textrow('Obiettivi dichiarati',p.goals||'Da approfondire');textrow('Situazione previdenziale',p.pension||'Da approfondire');textrow('Nucleo familiare',x.family||'Da acquisire')});
+ section('05','Prossimi passi',()=>{note(reportMode==='client'?'Le informazioni e gli obiettivi saranno approfonditi e condivisi nel prossimo incontro.':'Nota operativa del consulente: '+(x.diagnosisNotes||'Da definire.'))});
+ if(reportMode==='internal'){
+ section('06','Verifiche e attività interne',()=>{
+ textrow('Intervista completata',done()+'/18');textrow('Posizioni non documentate',String(d.unverified.length));textrow('Approfondimenti aperti',String(d.pending.length));
+ ensure(42);tx('Questioni da approfondire',L,y,13,'F2',navy);y+=26;
+ if(!d.pending.length)note('Nessuna segnalazione esplicita.');else for(const q of d.pending){note(q.area+' · '+q.question+(x.notes&&x.notes[q.key]?' — '+x.notes[q.key]:''))}
+ ensure(42);tx('Attività aperte',L,y,13,'F2',navy);y+=26;
+ if(!d.pendingTasks.length)note('Nessuna attività aperta.');else for(const q of d.pendingTasks)note(q.text+' ('+(q.owner||'N/D')+')');
+ ensure(42);tx('Note del consulente',L,y,13,'F2',navy);y+=25;note(x.diagnosisNotes||'Da compilare');
+ })}
+ ensure(55);line(L,y+8,R,y+8);tx('MARCO MECCHERI · PERSONAL FINANCIAL ADVISOR',L,y+20,8,'F1',grey);tx(reportMode==='internal'?'USO INTERNO · DEMO':'DEMO · DATI FITTIZI',reportMode==='internal'?405:410,y+20,8,'F1',grey);
+ addPage();
+ function bytes(v){let a=[];for(const ch of v){let k=ch.charCodeAt(0);const map={8364:128,8216:145,8217:146,8220:147,8221:148,8226:149,8211:150,8212:151,8482:153};a.push(map[k]??(k<=255?k:63))}return new Uint8Array(a)}
+ const objects=[null], obj=s=>{objects.push(s);return objects.length-1};
+ const f1=obj('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+ const f2=obj('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+ const f3=obj('<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>');
+ const parent=obj('');const refs=[];
+ for(const content of pages){let b=bytes(content);let stream=obj('<< /Length '+b.length+' >>\nstream\n'+content+'\nendstream');refs.push(obj(`<< /Type /Page /Parent ${parent} 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 ${f1} 0 R /F2 ${f2} 0 R /F3 ${f3} 0 R >> >> /Contents ${stream} 0 R >>`))}
+ objects[parent]=`<< /Type /Pages /Kids [${refs.map(i=>i+' 0 R').join(' ')}] /Count ${refs.length} >>`;
+ const catalog=obj(`<< /Type /Catalog /Pages ${parent} 0 R >>`);
+ let chunks=[bytes('%PDF-1.4\n%âãÏÓ\n')],offs=[0],pos=chunks[0].length;
+ for(let i=1;i<objects.length;i++){offs[i]=pos;const b=bytes(`${i} 0 obj\n${objects[i]}\nendobj\n`);chunks.push(b);pos+=b.length}
+ let xref=`xref\n0 ${objects.length}\n0000000000 65535 f \n`;for(let i=1;i<objects.length;i++)xref+=String(offs[i]).padStart(10,'0')+' 00000 n \n';
+ chunks.push(bytes(xref+`trailer\n<< /Size ${objects.length} /Root ${catalog} 0 R >>\nstartxref\n${pos}\n%%EOF`));
+ const blob=new Blob(chunks,{type:'application/pdf'});const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='Private-CRM-1.7-'+(reportMode==='client'?'relazione-cliente':'report-interno')+'.pdf';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+
+</script></body></html>
