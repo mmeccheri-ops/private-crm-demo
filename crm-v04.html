@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Private CRM 0.4</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f8;color:#20334b;font:15px Arial,sans-serif}
+header{background:#172d4d;color:white;padding:23px}
+header h1{margin:0;font-size:25px}
+header p{margin:7px 0 0;color:#d4deeb}
+main{max-width:950px;margin:auto;padding:16px}
+nav{display:flex;flex-wrap:wrap;gap:7px;margin:17px 0}
+button{border:0;border-radius:8px;padding:11px 13px;background:#193f6b;color:white;cursor:pointer}
+nav button{background:#e0e8f1;color:#193f6b}
+nav button.active{background:#193f6b;color:white}
+.card{background:white;border:1px solid #dce4ed;border-radius:12px;padding:18px;margin:12px 0}
+label{display:block;font-size:13px;font-weight:bold;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #ccd6e2;border-radius:7px;font:inherit}
+textarea{min-height:70px}
+.item{border-bottom:1px solid #e5eaf0;padding:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.muted{color:#65758a;font-size:13px}
+.warning{background:#fff0d0;padding:12px;border-radius:9px}
+h2{font-size:21px;margin:0 0 12px}
+h3{font-size:16px}
+</style>
+</head>
+<body>
+<header><h1>PRIVATE CRM</h1><p>Versione 0.4 - Pianificazione patrimoniale e assicurativa</p></header>
+<main>
+<div class="warning">DEMO PUBBLICA: usare soltanto dati fittizi. Nessun accesso riservato o database condiviso.</div>
+<nav id="menu"></nav>
+<section id="app"></section>
+</main>
+<script>
+"use strict";
+const tabs=["Clienti","Scheda","Intervista","Approfondimenti","Polizze","Fabbisogno","Verbali","Attività"];
+const questions=[
+["Famiglia","Composizione del nucleo familiare?","Persone economicamente a carico?","Esigenze di tutela familiare?"],
+["Redditi","Reddito netto familiare annuo?","Spese familiari annue?","Riserva per imprevisti?"],
+["Patrimonio","Patrimonio finanziario complessivo?","Immobili posseduti?","Mutui o finanziamenti?"],
+["Previdenza","Pensione futura stimata?","Fondi pensione o PIP presenti?","Divario previdenziale valutato?"],
+["Protezione","Coperture caso morte esistenti?","Coperture invalidità e sanitarie?","Rischio non autosufficienza valutato?"],
+["Obiettivi","Obiettivi a breve termine?","Obiettivi a lungo termine?","Pianificazione successoria affrontata?"]
+];
+function newClient(name){
+return {name:name,job:"",family:"",assets:"",income:65000,years:8,debts:100000,liquid:80000,answers:{},notes:{},policies:[],meetings:[],tasks:[]};
+}
+let db={clients:[newClient("Mario Rossi (demo)")],selected:0};
+try{
+let saved=JSON.parse(localStorage.getItem("privateCRM04"));
+if(saved&&Array.isArray(saved.clients))db=saved;
+}catch(e){}
+let tab=0;
+const client=()=>db.clients[db.selected];
+function save(){try{localStorage.setItem("privateCRM04",JSON.stringify(db));}catch(e){}}
+function esc(x){return String(x??"").replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function money(x){return new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(Number(x)||0)}
+function field(label,key,type="text"){return '<label>'+label+'</label><input data-field="'+key+'" type="'+type+'" value="'+esc(client()[key])+'">'}
+function go(i){tab=i;render();window.scrollTo(0,0)}
+function selectClient(i){db.selected=i;save();go(1)}
+function addClient(){let n=document.getElementById("newname").value.trim();if(!n)return alert("Inserisci un nome fittizio");db.clients.push(newClient(n));db.selected=db.clients.length-1;save();go(1)}
+function addPolicy(){
+let p={type:document.getElementById("ptype").value,company:document.getElementById("pcompany").value,amount:document.getElementById("pamount").value,status:document.getElementById("pstatus").value};
+if(!p.company.trim())return alert("Inserisci la compagnia");
+client().policies.push(p);save();render();
+}
+function removePolicy(i){client().policies.splice(i,1);save();render()}
+function addMeeting(){
+let text=document.getElementById("mtext").value.trim();
+if(!text)return alert("Inserisci le note");
+client().meetings.push({type:document.getElementById("mtype").value,text:text,date:new Date().toLocaleDateString("it-IT"),visibility:document.getElementById("mvis").value});
+save();render();
+}
+function addTask(){
+let text=document.getElementById("tasktext").value.trim();
+if(!text)return alert("Descrivi l'attività");
+client().tasks.push({text:text,owner:document.getElementById("owner").value,done:false});
+save();render();
+}
+function toggleTask(i){client().tasks[i].done=!client().tasks[i].done;save();render()}
+function render(){
+document.getElementById("menu").innerHTML=tabs.map((x,i)=>'<button class="'+(tab===i?"active":"")+'" onclick="go('+i+')">'+x+'</button>').join("");
+let c=client(),h="";
+if(tab===0){
+h='<div class="card"><h2>Archivio clienti</h2>'+db.clients.map((x,i)=>'<div class="item"><b>'+esc(x.name)+'</b> <button onclick="selectClient('+i+')">Apri scheda</button></div>').join("")+'<h3>Nuovo cliente dimostrativo</h3><input id="newname" placeholder="Nome fittizio"><p><button onclick="addClient()">Aggiungi cliente</button></p></div>';
+}
+if(tab===1){
+h='<div class="card"><h2>Scheda cliente</h2>'+field("Nominativo","name")+field("Professione","job")+field("Nucleo familiare","family")+field("Patrimonio stimato (€)","assets","number")+'<p class="muted">Le informazioni vengono conservate soltanto nel browser di questo dispositivo.</p></div>';
+}
+if(tab===2){
+let n=Object.values(c.answers).filter(x=>x&&x!=="Da esaminare").length;
+h='<div class="card"><h2>Prima intervista</h2><p>'+n+' di 18 domande esaminate</p></div>';
+questions.forEach((g,i)=>{
+h+='<div class="card"><h3>'+g[0]+'</h3>';
+g.slice(1).forEach((q,j)=>{
+let k=i+"-"+j;
+h+='<div class="item"><b>'+q+'</b><label>Stato</label><select data-answer="'+k+'">'+["Da esaminare","Verificato","Non presente","Da approfondire"].map(x=>'<option '+((c.answers[k]||"Da esaminare")===x?"selected":"")+'>'+x+'</option>').join("")+'</select><label>Risposta e note</label><textarea data-note="'+k+'">'+esc(c.notes[k]||"")+'</textarea></div>';
+});
+h+='</div>';
+});
+}
+if(tab===3){
+h='<div class="card"><h2>Approfondimenti aperti</h2>';let n=0;
+questions.forEach((g,i)=>g.slice(1).forEach((q,j)=>{
+let k=i+"-"+j;
+if(c.answers[k]==="Da approfondire"){n++;h+='<div class="item"><b>'+g[0]+'</b><p>'+q+'</p><p class="muted">'+esc(c.notes[k]||"Nessuna nota")+'</p></div>'}
+}));
+if(!n)h+='<p>Nessun approfondimento aperto.</p>';
+h+='</div>';
+}
+if(tab===4){
+h='<div class="card"><h2>Coperture assicurative</h2>'+c.policies.map((p,i)=>'<div class="item"><b>'+esc(p.type)+'</b><p>'+esc(p.company)+' - '+money(p.amount)+'</p><small>'+esc(p.status)+'</small> <button onclick="removePolicy('+i+')">Elimina</button></div>').join("")+'<h3>Nuova copertura</h3><label>Tipologia</label><select id="ptype">'+["Temporanea caso morte","Invalidità permanente","Infortuni","Sanitaria","LTC","Abitazione","RC professionale","Altra"].map(x=>'<option>'+x+'</option>').join("")+'</select><label>Compagnia</label><input id="pcompany"><label>Capitale o massimale (€)</label><input id="pamount" type="number"><label>Stato</label><select id="pstatus"><option>Da verificare</option><option>Documentata</option></select><p><button onclick="addPolicy()">Aggiungi copertura</button></p></div>';
+}
+if(tab===5){
+let covered=c.policies.filter(p=>p.type==="Temporanea caso morte"&&p.status==="Documentata").reduce((s,p)=>s+(Number(p.amount)||0),0);
+let need=Math.max(0,Number(c.income)*Number(c.years)+Number(c.debts)-Number(c.liquid));
+h='<div class="card"><h2>Fabbisogno caso morte</h2>'+field("Reddito annuo da proteggere (€)","income","number")+field("Anni di protezione","years","number")+field("Debiti da coprire (€)","debts","number")+field("Liquidità disponibile (€)","liquid","number")+'<div class="grid"><div><h3>Fabbisogno</h3><h2>'+money(need)+'</h2></div><div><h3>TCM documentate</h3><h2>'+money(covered)+'</h2></div><div><h3>Scostamento</h3><h2>'+money(Math.max(0,need-covered))+'</h2></div></div><p class="muted">Calcolo indicativo, non costituisce una raccomandazione assicurativa.</p></div>';
+}
+if(tab===6){
+h='<div class="card"><h2>Verbali delle interazioni</h2>'+c.meetings.map(m=>'<div class="item"><b>'+esc(m.type)+'</b> - '+esc(m.date)+'<p>'+esc(m.text)+'</p><small>Visibilità dichiarata: '+esc(m.visibility)+'</small></div>').join("")+'<h3>Nuovo verbale</h3><label>Tipologia</label><select id="mtype"><option>Incontro</option><option>Telefonata</option><option>Email</option></select><label>Argomenti e azioni concordate</label><textarea id="mtext"></textarea><label>Visibilità dimostrativa</label><select id="mvis"><option>Privato</option><option>Assistenti</option><option>Team</option></select><p><button onclick="addMeeting()">Registra verbale</button></p><p class="muted">La visibilità non applica ancora permessi reali.</p></div>';
+}
+if(tab===7){
+h='<div class="card"><h2>Attività e scadenze</h2>'+c.tasks.map((t,i)=>'<div class="item"><b>'+esc(t.text)+'</b><p>Responsabile: '+esc(t.owner)+'</p><button onclick="toggleTask('+i+')">'+(t.done?"Completata":"Da completare")+'</button></div>').join("")+'<h3>Nuova attività</h3><label>Descrizione</label><input id="tasktext"><label>Responsabile</label><select id="owner"><option>Consulente</option><option>Assistente</option></select><p><button onclick="addTask()">Aggiungi attività</button></p></div>';
+}
+document.getElementById("app").innerHTML=h;
+document.querySelectorAll("[data-field]").forEach(e=>e.addEventListener("change",()=>{c[e.dataset.field]=e.value;save();if(tab===5)render()}));
+document.querySelectorAll("[data-answer]").forEach(e=>e.addEventListener("change",()=>{c.answers[e.dataset.answer]=e.value;save()}));
+document.querySelectorAll("[data-note]").forEach(e=>e.addEventListener("change",()=>{c.notes[e.dataset.note]=e.value;save()}));
+}
+render();
+</script>
+</body>
+</html>
