@@ -1,56 +1,16 @@
 <!DOCTYPE html>
-<html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Private CRM 0.3</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#f3f5f9;color:#203047;font:15px Arial,sans-serif}
-header{background:#142b49;color:white;padding:22px}header h1{margin:0;font-size:25px}
-main{max-width:950px;margin:auto;padding:16px}nav{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}
-button{background:#173d69;color:white;border:0;border-radius:8px;padding:11px;cursor:pointer}
-nav button{background:#e1e8f0;color:#173d69}nav button.active{background:#173d69;color:white}
-.card{background:white;border:1px solid #dce3eb;border-radius:12px;padding:18px;margin:12px 0}
-label{display:block;margin:12px 0 5px;font-weight:bold;font-size:13px}
-input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;font:inherit}
-textarea{min-height:75px}.item{padding:12px 0;border-bottom:1px solid #e5eaf0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-small,.muted{color:#64748b}.warning{background:#fff0ce;padding:12px;border-radius:8px}
-h2{font-size:21px;margin-top:0}h3{font-size:17px}
-</style></head><body>
-<header><h1>PRIVATE CRM</h1><small>Versione 0.3 · Pianificazione patrimoniale e assicurativa</small></header>
-<main><div class="warning">DEMO PUBBLICA: utilizzare esclusivamente dati fittizi. Nessuna autenticazione o protezione multiutente.</div><nav id="nav"></nav><div id="content"></div></main>
-<script>
-const tabs=["Cliente","Prima intervista","Approfondimenti","Polizze","Fabbisogno","Verbali"];
-const groups=[
-["Famiglia","Composizione del nucleo familiare?","Persone economicamente a carico?","Esigenze di tutela familiare?"],
-["Redditi","Reddito netto familiare annuo?","Spese familiari annue?","Riserva per imprevisti?"],
-["Patrimonio","Patrimonio finanziario complessivo?","Immobili posseduti?","Mutui o finanziamenti?"],
-["Previdenza","Pensione futura stimata?","Fondi pensione o PIP presenti?","Divario previdenziale valutato?"],
-["Protezione","Coperture caso morte esistenti?","Coperture invalidità e sanitarie?","Rischio non autosufficienza valutato?"],
-["Obiettivi","Obiettivi a breve termine?","Obiettivi a lungo termine?","Pianificazione successoria affrontata?"]
-];
-let data={name:"Mario Rossi (demo)",job:"Imprenditore",family:"Coniuge e due figli",assets:"1250000",answers:{},notes:{},policies:[],meetings:[],income:65000,years:8,debts:100000,liquid:80000};
-try{data={...data,...JSON.parse(localStorage.getItem("crm03")||"{}")}}catch(e){}
-let tab=0;
-const save=()=>{try{localStorage.setItem("crm03",JSON.stringify(data))}catch(e){}};
-const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const money=x=>new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(Number(x)||0);
-const field=(label,key,type="text")=>'<label>'+label+'</label><input data-field="'+key+'" type="'+type+'" value="'+esc(data[key])+'">';
-function show(){
-document.getElementById("nav").innerHTML=tabs.map((x,i)=>'<button class="'+(tab===i?"active":"")+'" onclick="go('+i+')">'+x+'</button>').join("");
-let h="";
-if(tab===0)h='<div class="card"><h2>Scheda cliente</h2>'+field("Nome","name")+field("Professione","job")+field("Nucleo familiare","family")+field("Patrimonio complessivo (€)","assets","number")+'</div>';
-if(tab===1){let n=Object.values(data.answers).filter(x=>x&&x!=="Da esaminare").length;h='<div class="card"><h2>Prima intervista</h2><p>'+n+'/18 domande esaminate</p></div>';groups.forEach((g,i)=>{h+='<div class="card"><h3>'+g[0]+'</h3>';g.slice(1).forEach((q,j)=>{let k=i+"-"+j;h+='<div class="item"><b>'+q+'</b><label>Stato</label><select data-answer="'+k+'">'+["Da esaminare","Verificato","Non presente","Da approfondire"].map(x=>'<option '+((data.answers[k]||"Da esaminare")===x?"selected":"")+'>'+x+'</option>').join("")+'</select><label>Note</label><textarea data-note="'+k+'">'+esc(data.notes[k]||"")+'</textarea></div>'});h+='</div>'})}
-if(tab===2){h='<div class="card"><h2>Approfondimenti</h2>';let n=0;groups.forEach((g,i)=>g.slice(1).forEach((q,j)=>{let k=i+"-"+j;if(data.answers[k]==="Da approfondire"){n++;h+='<div class="item"><b>'+g[0]+'</b><p>'+q+'</p><small>'+esc(data.notes[k]||"Nessuna nota")+'</small></div>'}}));if(!n)h+='<p>Nessun approfondimento aperto.</p>';h+='</div>'}
-if(tab===3){h='<div class="card"><h2>Coperture assicurative</h2>'+data.policies.map((p,i)=>'<div class="item"><b>'+esc(p.type)+'</b><p>'+esc(p.company)+' · '+money(p.amount)+'</p><small>'+esc(p.status)+'</small> <button onclick="removePolicy('+i+')">Elimina</button></div>').join("")+'<h3>Nuova copertura</h3><label>Tipologia</label><select id="ptype">'+["Temporanea caso morte","Invalidità permanente","Infortuni","Sanitaria","LTC","Abitazione","RC professionale","Altra"].map(x=>'<option>'+x+'</option>').join("")+'</select><label>Compagnia</label><input id="pcompany"><label>Capitale / massimale (€)</label><input id="pamount" type="number"><label>Stato</label><select id="pstatus"><option>Da verificare</option><option>Documentata</option></select><p><button onclick="addPolicy()">Aggiungi copertura</button></p></div>'}
-if(tab===4){let covered=data.policies.filter(p=>p.type==="Temporanea caso morte"&&p.status==="Documentata").reduce((s,p)=>s+(Number(p.amount)||0),0);let need=Math.max(0,Number(data.income)*Number(data.years)+Number(data.debts)-Number(data.liquid));h='<div class="card"><h2>Fabbisogno assicurativo caso morte</h2>'+field("Reddito annuo da proteggere (€)","income","number")+field("Anni di protezione","years","number")+field("Debiti da coprire (€)","debts","number")+field("Liquidità disponibile (€)","liquid","number")+'<div class="grid"><div><h3>Fabbisogno stimato</h3><h2>'+money(need)+'</h2></div><div><h3>TCM documentate</h3><h2>'+money(covered)+'</h2></div><div><h3>Scostamento</h3><h2>'+money(Math.max(0,need-covered))+'</h2></div></div><small>Calcolo puramente indicativo, non costituisce una raccomandazione assicurativa.</small></div>'}
-if(tab===5){h='<div class="card"><h2>Verbali delle interazioni</h2>'+data.meetings.map(m=>'<div class="item"><b>'+esc(m.type)+'</b> · '+esc(m.date)+'<p>'+esc(m.text)+'</p><small>Visibilità dichiarata: '+esc(m.visibility)+'</small></div>').join("")+'<h3>Nuovo verbale</h3><label>Interazione</label><select id="mtype"><option>Incontro</option><option>Telefonata</option><option>Email</option></select><label>Note del verbale</label><textarea id="mtext"></textarea><label>Visibilità</label><select id="mvisibility"><option>Privato</option><option>Assistenti</option><option>Team</option></select><p><button onclick="addMeeting()">Registra verbale</button></p><small>La visibilità è solo dimostrativa: non impedisce l'accesso ad altri utenti.</small></div>'}
-document.getElementById("content").innerHTML=h;
-document.querySelectorAll("[data-field]").forEach(e=>e.addEventListener("change",()=>{data[e.dataset.field]=e.value;save();if(tab===4)show()}));
-document.querySelectorAll("[data-answer]").forEach(e=>e.addEventListener("change",()=>{data.answers[e.dataset.answer]=e.value;save()}));
-document.querySelectorAll("[data-note]").forEach(e=>e.addEventListener("change",()=>{data.notes[e.dataset.note]=e.value;save()}));
-}
-function go(i){tab=i;show();window.scrollTo(0,0)}
-function addPolicy(){let p={type:document.getElementById("ptype").value,company:document.getElementById("pcompany").value,amount:document.getElementById("pamount").value,status:document.getElementById("pstatus").value};if(!p.company.trim())return alert("Inserisci la compagnia");data.policies.push(p);save();show()}
-function removePolicy(i){data.policies.splice(i,1);save();show()}
-function addMeeting(){let text=document.getElementById("mtext").value;if(!text.trim())return alert("Inserisci le note");data.meetings.push({type:document.getElementById("mtype").value,text,date:new Date().toLocaleDateString("it-IT"),visibility:document.getElementById("mvisibility").value});save();show()}
-show();
-</script></body></html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private CRM</title>
+</head>
+<body style="font-family:Arial;background:#f3f5f9;color:#173b66;padding:20px">
+<h1>PRIVATE CRM 0.3</h1>
+<p>Menu di navigazione</p>
+<button onclick="document.getElementById('risultato').textContent='Scheda cliente funzionante'">Cliente</button>
+<button onclick="document.getElementById('risultato').textContent='Sezione polizze funzionante'">Polizze</button>
+<button onclick="document.getElementById('risultato').textContent='Sezione verbali funzionante'">Verbali</button>
+<h2 id="risultato">Seleziona una sezione</h2>
+</body>
+</html>
